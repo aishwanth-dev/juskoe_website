@@ -21,7 +21,7 @@ import {
 } from "@/lib/entitlement";
 
 /** Shape of the row we read from the existing `profiles` table (read-only). */
-export interface JusayProfile {
+export interface JuskoeProfile {
   id: string;
   email: string | null;
   full_name: string | null;
@@ -32,7 +32,7 @@ export interface JusayProfile {
 interface AuthContextValue {
   user: User | null;
   session: Session | null;
-  profile: JusayProfile | null;
+  profile: JuskoeProfile | null;
   /** Full result of the canonical entitlement rule. See src/lib/entitlement.ts. */
   entitlement: Entitlement;
   /**
@@ -74,7 +74,7 @@ const sameEntitlement = (a: Entitlement, b: Entitlement): boolean =>
  *
  * A missing row is not an error: the website treats "no profile yet" as free.
  */
-const fetchProfile = async (userId: string): Promise<JusayProfile | null> => {
+const fetchProfile = async (userId: string): Promise<JuskoeProfile | null> => {
   const { data, error } = await supabase
     .from("profiles")
     .select(PROFILE_COLUMNS)
@@ -82,15 +82,15 @@ const fetchProfile = async (userId: string): Promise<JusayProfile | null> => {
     .maybeSingle();
 
   if (error) {
-    console.error("[jusay] could not load profile:", error.message);
+    console.error("[juskoe] could not load profile:", error.message);
     return null;
   }
-  return (data as JusayProfile | null) ?? null;
+  return (data as JuskoeProfile | null) ?? null;
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
-  const [profile, setProfile] = useState<JusayProfile | null>(null);
+  const [profile, setProfile] = useState<JuskoeProfile | null>(null);
   const [entitlement, setEntitlement] = useState<Entitlement>(FREE_ENTITLEMENT);
   const [loading, setLoading] = useState(true);
   const mounted = useRef(true);
@@ -144,12 +144,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     supabase.auth
       .getSession()
       .then(async ({ data, error }) => {
-        if (error) console.error("[jusay] getSession failed:", error.message);
+        if (error) console.error("[juskoe] getSession failed:", error.message);
         if (!mounted.current) return;
         setSession(data?.session ?? null);
         await loadAccount(data?.session ?? null);
       })
-      .catch((err) => console.error("[jusay] auth bootstrap failed:", err))
+      .catch((err) => console.error("[juskoe] auth bootstrap failed:", err))
       .finally(() => {
         if (mounted.current) setLoading(false);
       });

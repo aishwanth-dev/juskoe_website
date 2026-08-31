@@ -16,12 +16,12 @@ const recorder = () => {
 
 describe("DOWNLOAD_URL", () => {
   it("points at the installer bundled in the site's public/ folder", () => {
-    expect(DOWNLOAD_URL).toBe("/Jusay-Setup-1.0.0.exe");
+    expect(DOWNLOAD_URL).toBe("/Juskoe-Setup-1.0.0.exe");
   });
 
   it("is a root-relative .exe path (served same-origin, no query needed)", () => {
-    const url = new URL(DOWNLOAD_URL, "https://jusay.in");
-    expect(url.pathname).toBe("/Jusay-Setup-1.0.0.exe");
+    const url = new URL(DOWNLOAD_URL, "https://juskoe.in");
+    expect(url.pathname).toBe("/Juskoe-Setup-1.0.0.exe");
     expect(url.pathname.endsWith(".exe")).toBe(true);
     expect(url.search).toBe("");
   });
@@ -44,15 +44,15 @@ describe("download intent", () => {
   });
 
   it("ignores unexpected stored values", () => {
-    sessionStorage.setItem("jusay:resume-download", "linux");
+    sessionStorage.setItem("juskoe:resume-download", "linux");
     expect(hasPendingDownload()).toBe(false);
     expect(takeDownloadIntent()).toBeNull();
   });
 
   it("does not collide with the checkout intent key", () => {
     rememberDownloadIntent();
-    expect(sessionStorage.getItem("jusay:resume-checkout")).toBeNull();
-    expect(sessionStorage.getItem("jusay:resume-download")).toBe("windows");
+    expect(sessionStorage.getItem("juskoe:resume-checkout")).toBeNull();
+    expect(sessionStorage.getItem("juskoe:resume-download")).toBe("windows");
   });
 });
 

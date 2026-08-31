@@ -22,7 +22,7 @@ const CountUp = ({ to, duration = 1.6 }: { to: number; duration?: number }) => {
   return <span ref={ref}>{value.toLocaleString("en-IN")}</span>;
 };
 
-/** A tiny 5-bar equalizer, echoing the jusay voice mark. */
+/** A tiny 5-bar equalizer, echoing the Juskoe voice mark. */
 const MiniWave = ({ color }: { color: string }) => (
   <div className="flex items-end gap-[3px] h-4" aria-hidden>
     {[0, 1, 2, 3, 4].map((i) => (

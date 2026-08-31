@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useState, useCallback } from "react";
-import logo from "@/assets/jusay-logo.png";
+import logo from "@/assets/juskoe-logo.png";
 import StarBorder from "./StarBorder";
 import "./StarBorder.css";
 import { useAuth } from "@/hooks/useAuth";

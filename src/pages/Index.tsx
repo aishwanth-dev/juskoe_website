@@ -10,7 +10,7 @@ import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import SectionClouds from "@/components/SectionClouds";
-import BigJusayText from "@/components/BigJusayText";
+import BigJuskoeText from "@/components/BigJuskoeText";
 import Pricing from "@/components/Pricing";
 
 /*
@@ -75,9 +75,9 @@ const Index = () => {
           </SectionClouds>
         </section>
 
-        {/* Big Jusay text */}
+        {/* Big Juskoe text */}
         <section style={{ backgroundColor: "#faf9ff" }}>
-          <BigJusayText />
+          <BigJuskoeText />
         </section>
 
         <Footer />

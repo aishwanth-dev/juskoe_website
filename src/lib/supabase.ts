@@ -1,7 +1,7 @@
 import { createClient, type Session, type SupabaseClient } from "@supabase/supabase-js";
 
 /**
- * Browser Supabase client for the Jusay website.
+ * Browser Supabase client for the Juskoe website.
  *
  * The URL and anon key are public by design (the anon key is guarded by Row Level
  * Security). They are read from Vite env vars with inline fallbacks so the site
@@ -26,7 +26,7 @@ export const supabase: SupabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON
     detectSessionInUrl: true,
     autoRefreshToken: true,
     flowType: "pkce",
-    storageKey: "jusay-web-auth",
+    storageKey: "juskoe-web-auth",
   },
 });
 
@@ -34,7 +34,7 @@ export const supabase: SupabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON
 export const getSession = async (): Promise<Session | null> => {
   const { data, error } = await supabase.auth.getSession();
   if (error) {
-    console.error("[jusay] getSession failed:", error.message);
+    console.error("[juskoe] getSession failed:", error.message);
     return null;
   }
   return data.session ?? null;
@@ -64,5 +64,5 @@ export const signInWithGoogle = async (redirectTo?: string) => {
 /** Sign out of this browser. Never throws. */
 export const signOut = async () => {
   const { error } = await supabase.auth.signOut();
-  if (error) console.error("[jusay] signOut failed:", error.message);
+  if (error) console.error("[juskoe] signOut failed:", error.message);
 };

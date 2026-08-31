@@ -11,7 +11,7 @@ const letters = [
     { char: ".", font: "'Times New Roman', Times, Georgia, serif", weight: 700, italic: true },
 ];
 
-const BigJusayText = () => {
+const BigJuskoeText = () => {
     const ref = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -64,4 +64,4 @@ const BigJusayText = () => {
     );
 };
 
-export default BigJusayText;
+export default BigJuskoeText;

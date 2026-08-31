@@ -46,9 +46,9 @@ const Account = () => {
   const pollStarted = useRef(false);
 
   useEffect(() => {
-    document.title = "Your account — Jusay";
+    document.title = "Your account — Juskoe";
     return () => {
-      document.title = "Jusay";
+      document.title = "Juskoe";
     };
   }, []);
 
@@ -72,7 +72,7 @@ const Account = () => {
       // Still not Pro after ~10s. The webhook may yet land; a refresh or tab
       // focus will pick it up, and the entitlement rule never shows a false Pro.
       console.warn(
-        "[jusay] payment reported success but the entitlement is still free after polling."
+        "[juskoe] payment reported success but the entitlement is still free after polling."
       );
     } finally {
       setActivating(false);
@@ -407,7 +407,7 @@ const Account = () => {
             {!isPro && !activating && (
               <p style={{ fontSize: 11, color: "rgba(46,45,45,0.4)", marginTop: 12, lineHeight: 1.6 }}>
                 New Pro users get the launch offer: {OFFER_LINE}. ₹49 today covers 2 months,
-                then ₹49/month. Cancel anytime from Jusay app settings.
+                then ₹49/month. Cancel anytime from Juskoe app settings.
               </p>
             )}
 

@@ -9,22 +9,22 @@ describe("buildCheckoutUrl", () => {
   const base = {
     subscriptionId: "sub_123",
     keyId: "rzp_test_abc",
-    email: "aish@jusay.in",
+    email: "aish@juskoe.in",
     name: "Aishwanth",
     plan: "pro_monthly" as const,
   };
 
   it("points at the static checkout page on the given origin", () => {
-    const url = new URL(buildCheckoutUrl("https://jusaywebsite.vercel.app", base));
-    expect(url.origin).toBe("https://jusaywebsite.vercel.app");
+    const url = new URL(buildCheckoutUrl("https://juskoe.in", base));
+    expect(url.origin).toBe("https://juskoe.in");
     expect(url.pathname).toBe("/checkout/");
   });
 
   it("passes every parameter the checkout page reads", () => {
-    const url = new URL(buildCheckoutUrl("https://jusaywebsite.vercel.app", base));
+    const url = new URL(buildCheckoutUrl("https://juskoe.in", base));
     expect(url.searchParams.get("subscription_id")).toBe("sub_123");
     expect(url.searchParams.get("key_id")).toBe("rzp_test_abc");
-    expect(url.searchParams.get("email")).toBe("aish@jusay.in");
+    expect(url.searchParams.get("email")).toBe("aish@juskoe.in");
     expect(url.searchParams.get("name")).toBe("Aishwanth");
     expect(url.searchParams.get("plan")).toBe("pro_monthly");
   });
@@ -79,12 +79,12 @@ describe("buildCheckoutUrl", () => {
     const url = new URL(
       buildCheckoutUrl("https://x.dev/", {
         ...base,
-        email: "a+b@jusay.in",
+        email: "a+b@juskoe.in",
         name: "Aish & Co",
       })
     );
     expect(url.pathname).toBe("/checkout/");
-    expect(url.searchParams.get("email")).toBe("a+b@jusay.in");
+    expect(url.searchParams.get("email")).toBe("a+b@juskoe.in");
     expect(url.searchParams.get("name")).toBe("Aish & Co");
   });
 });
@@ -103,7 +103,7 @@ describe("checkout intent", () => {
   });
 
   it("ignores unexpected stored values", () => {
-    sessionStorage.setItem("jusay:resume-checkout", "free_forever");
+    sessionStorage.setItem("juskoe:resume-checkout", "free_forever");
     expect(takeCheckoutIntent()).toBeNull();
   });
 });
@@ -112,7 +112,7 @@ describe("web-initiated marker", () => {
   const base = {
     subscriptionId: "sub_123",
     keyId: "rzp_test_abc",
-    email: "aish@jusay.in",
+    email: "aish@juskoe.in",
     name: "Aishwanth",
     plan: "pro_monthly" as const,
   };
@@ -120,7 +120,7 @@ describe("web-initiated marker", () => {
   // The checkout page hands the browser back to /account?upgraded=1 only for
   // web-initiated payments. Desktop opens the same page without this marker.
   it("tags every website checkout with src=web", () => {
-    const url = new URL(buildCheckoutUrl("https://jusaywebsite.vercel.app", base));
+    const url = new URL(buildCheckoutUrl("https://juskoe.in", base));
     expect(url.searchParams.get("src")).toBe("web");
   });
 

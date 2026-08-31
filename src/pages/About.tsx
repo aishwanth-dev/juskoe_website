@@ -27,7 +27,7 @@ const values = [
   {
     icon: Heart,
     title: "Built With Passion",
-    desc: "Jusay was built by two developers who were tired of typing. Every feature exists because it was needed.",
+    desc: "Juskoe was built by two developers who were tired of typing. Every feature exists because it was needed.",
   },
 ];
 
@@ -35,23 +35,23 @@ const founders = [
   {
     name: "Aishwanth M S",
     role: "CEO & Founder",
-    email: "aishwanth@jusay.vercel.app",
+    email: "aishwanth@juskoe.in",
     linkedin: "https://www.linkedin.com/in/aishwanth/",
-    bio: "Aishwanth is a full-stack developer and AI entrepreneur who architected Jusay from the ground up. As CEO, he leads product vision, engineering strategy, and the mission to make voice the universal input layer for every desktop application. He built Jusay to solve his own productivity frustrations — and it's now relied upon by thousands of users worldwide.",
+    bio: "Aishwanth is a full-stack developer and AI entrepreneur who architected Juskoe from the ground up. As CEO, he leads product vision, engineering strategy, and the mission to make voice the universal input layer for every desktop application. He built Juskoe to solve his own productivity frustrations — and it's now relied upon by thousands of users worldwide.",
   },
   {
     name: "Vishwajeeth Rao B",
     role: "Co-Founder",
-    email: "vishwajeeth@jusay.vercel.app",
+    email: "vishwajeeth@juskoe.in",
     linkedin: "https://www.linkedin.com/in/vishwajeeth-rao-b-7a1764381/",
-    bio: "Vishwajeeth brings strategic product thinking and operational excellence to Jusay. As Co-Founder, he drives user growth, partnerships, and the overall product roadmap — ensuring every feature we ship genuinely improves how people work and communicate with voice AI technology.",
+    bio: "Vishwajeeth brings strategic product thinking and operational excellence to Juskoe. As Co-Founder, he drives user growth, partnerships, and the overall product roadmap — ensuring every feature we ship genuinely improves how people work and communicate with voice AI technology.",
   },
   {
     name: "Govind D S",
     role: "CTO",
-    email: "govind@jusay.vercel.app",
+    email: "govind@juskoe.in",
     linkedin: "https://www.linkedin.com/in/govind-ds-16280135/",
-    bio: "Govind leads the technical architecture and engineering teams at Jusay. As CTO, he oversees the AI/ML pipeline, speech-to-text inference, system-level integrations, and cloud infrastructure — ensuring Jusay delivers blazing-fast, accurate voice recognition across Windows and macOS with enterprise-grade reliability.",
+    bio: "Govind leads the technical architecture and engineering teams at Juskoe. As CTO, he oversees the AI/ML pipeline, speech-to-text inference, system-level integrations, and cloud infrastructure — ensuring Juskoe delivers blazing-fast, accurate voice recognition across Windows and macOS with enterprise-grade reliability.",
   },
 ];
 
@@ -60,10 +60,10 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://jusay.vercel.app/#organization",
-      "name": "Jusay",
-      "url": "https://jusay.vercel.app",
-      "description": "Jusay is a universal voice AI assistant that works system-wide on Windows and macOS. Speak naturally and get polished text in any app — Gmail, VS Code, Slack, Word, and more.",
+      "@id": "https://juskoe.in/#organization",
+      "name": "Juskoe",
+      "url": "https://juskoe.in",
+      "description": "Juskoe is a universal voice AI assistant that works system-wide on Windows and macOS. Speak naturally and get polished text in any app — Gmail, VS Code, Slack, Word, and more.",
       "slogan": "Just speak, it happens",
       "foundingDate": "2025",
       "founder": [
@@ -71,14 +71,14 @@ const jsonLd = {
           "@type": "Person",
           "name": "Aishwanth M S",
           "jobTitle": "CEO & Founder",
-          "email": "aishwanth@jusay.vercel.app",
+          "email": "aishwanth@juskoe.in",
           "url": "https://www.linkedin.com/in/aishwanth/"
         },
         {
           "@type": "Person",
           "name": "Vishwajeeth Rao B",
           "jobTitle": "Co-Founder",
-          "email": "vishwajeeth@jusay.vercel.app",
+          "email": "vishwajeeth@juskoe.in",
           "url": "https://www.linkedin.com/in/vishwajeeth-rao-b-7a1764381/"
         }
       ],
@@ -86,14 +86,14 @@ const jsonLd = {
         "@type": "Person",
         "name": "Govind D S",
         "jobTitle": "CTO",
-        "email": "govind@jusay.vercel.app",
+        "email": "govind@juskoe.in",
         "url": "https://www.linkedin.com/in/govind-ds-16280135/"
       },
       "sameAs": [
-        "https://jusay.vercel.app",
-        "https://www.linkedin.com/company/Jusay"
+        "https://juskoe.in",
+        "https://www.linkedin.com/company/Juskoe"
       ],
-      "logo": "https://jusay.vercel.app/jusay-logo.png",
+      "logo": "https://juskoe.in/juskoe-logo.png",
       "foundingLocation": {
         "@type": "Place",
         "name": "India"
@@ -101,60 +101,60 @@ const jsonLd = {
     },
     {
       "@type": "WebPage",
-      "@id": "https://jusay.vercel.app/about",
-      "name": "About Jusay — Meet the Founders | AI Voice Assistant",
-      "description": "Learn about Jusay, the universal voice layer for your OS. Meet founders Aishwanth M S (CEO), Vishwajeeth Rao B (Co-Founder), and Govind D S (CTO) — the team building AI-powered voice-to-text for every desktop app.",
-      "isPartOf": { "@id": "https://jusay.vercel.app/#website" },
+      "@id": "https://juskoe.in/about",
+      "name": "About Juskoe — Meet the Founders | AI Voice Assistant",
+      "description": "Learn about Juskoe, the universal voice layer for your OS. Meet founders Aishwanth M S (CEO), Vishwajeeth Rao B (Co-Founder), and Govind D S (CTO) — the team building AI-powered voice-to-text for every desktop app.",
+      "isPartOf": { "@id": "https://juskoe.in/#website" },
       "breadcrumb": {
         "@type": "BreadcrumbList",
         "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://jusay.vercel.app" },
-          { "@type": "ListItem", "position": 2, "name": "About", "item": "https://jusay.vercel.app/about" }
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://juskoe.in" },
+          { "@type": "ListItem", "position": 2, "name": "About", "item": "https://juskoe.in/about" }
         ]
       }
     },
     {
       "@type": "FAQPage",
-      "@id": "https://jusay.vercel.app/about#faq",
+      "@id": "https://juskoe.in/about#faq",
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "What is Jusay?",
+          "name": "What is Juskoe?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Jusay is a universal AI-powered voice assistant that works system-wide on Windows and macOS. It lets you speak naturally and get polished, formatted text in any application — Gmail, VS Code, Slack, Word, browsers, and more."
+            "text": "Juskoe is a universal AI-powered voice assistant that works system-wide on Windows and macOS. It lets you speak naturally and get polished, formatted text in any application — Gmail, VS Code, Slack, Word, browsers, and more."
           }
         },
         {
           "@type": "Question",
-          "name": "Who founded Jusay?",
+          "name": "Who founded Juskoe?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Jusay was founded by Aishwanth M S (CEO), Vishwajeeth Rao B (Co-Founder), and Govind D S (CTO) under the product studio 16xStudios."
+            "text": "Juskoe was founded by Aishwanth M S (CEO), Vishwajeeth Rao B (Co-Founder), and Govind D S (CTO) under the product studio 16xStudios."
           }
         },
         {
           "@type": "Question",
-          "name": "Is Jusay free to use?",
+          "name": "Is Juskoe free to use?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, Jusay offers a free tier with powerful voice-to-text capabilities. Premium features including AI-powered formatting, custom dictionaries, snippets, and cloud sync are available for pro users."
+            "text": "Yes, Juskoe offers a free tier with powerful voice-to-text capabilities. Premium features including AI-powered formatting, custom dictionaries, snippets, and cloud sync are available for pro users."
           }
         },
         {
           "@type": "Question",
-          "name": "Does Jusay work in every application?",
+          "name": "Does Juskoe work in every application?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes! Jusay is a system-wide voice layer that works in any text field across all applications — email clients, code editors, messaging apps, document editors, browsers, and more."
+            "text": "Yes! Juskoe is a system-wide voice layer that works in any text field across all applications — email clients, code editors, messaging apps, document editors, browsers, and more."
           }
         },
         {
           "@type": "Question",
-          "name": "What languages does Jusay support?",
+          "name": "What languages does Juskoe support?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Jusay supports a wide range of languages for speech-to-text, with three distinct modes: AI Mode for intelligent formatting, Grammar Mode for clean dictation, and Notes Mode for quick capture."
+            "text": "Juskoe supports a wide range of languages for speech-to-text, with three distinct modes: AI Mode for intelligent formatting, Grammar Mode for clean dictation, and Notes Mode for quick capture."
           }
         }
       ]
@@ -166,32 +166,32 @@ const About = () => {
   return (
     <>
       <Helmet>
-        <title>About Jusay — Meet the Founders | AI Voice Assistant for Windows & macOS</title>
-        <meta name="description" content="Learn about Jusay, the universal voice layer for your operating system. Meet the founders — Aishwanth M S (CEO), Vishwajeeth Rao B (Co-Founder), and Govind D S (CTO). Discover how we're making voice-to-text work in every app, everywhere." />
-        <meta name="keywords" content="Jusay, voice assistant, AI voice typing, speech to text, voice to text desktop app, system-wide dictation, Jusay founders, Aishwanth, Vishwajeeth, Govind, 16xStudios, voice AI, desktop voice assistant, Windows voice typing, macOS dictation" />
-        <meta name="author" content="Jusay — 16xStudios" />
+        <title>Juskoe</title>
+        <meta name="description" content="Learn about Juskoe, the universal voice layer for your operating system. Meet the founders — Aishwanth M S (CEO), Vishwajeeth Rao B (Co-Founder), and Govind D S (CTO). Discover how we're making voice-to-text work in every app, everywhere." />
+        <meta name="keywords" content="Juskoe, voice assistant, AI voice typing, speech to text, voice to text desktop app, system-wide dictation, Juskoe founders, Aishwanth, Vishwajeeth, Govind, 16xStudios, voice AI, desktop voice assistant, Windows voice typing, macOS dictation" />
+        <meta name="author" content="Juskoe — 16xStudios" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
 
         {/* Open Graph */}
-        <meta property="og:title" content="About Jusay — Meet the Founders | AI Voice Assistant" />
-        <meta property="og:description" content="Jusay is a universal voice layer for your OS. Speak naturally, get polished text anywhere. Meet the team behind it — Aishwanth, Vishwajeeth, and Govind." />
-        <meta property="og:url" content="https://jusay.vercel.app/about" />
+        <meta property="og:title" content="About Juskoe — Meet the Founders | AI Voice Assistant" />
+        <meta property="og:description" content="Juskoe is a universal voice layer for your OS. Speak naturally, get polished text anywhere. Meet the team behind it — Aishwanth, Vishwajeeth, and Govind." />
+        <meta property="og:url" content="https://juskoe.in/about" />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Jusay" />
-        <meta property="og:image" content="https://jusay.vercel.app/jusay-logo.png" />
+        <meta property="og:site_name" content="Juskoe" />
+        <meta property="og:image" content="https://juskoe.in/juskoe-logo.png" />
         <meta property="og:image:width" content="512" />
         <meta property="og:image:height" content="512" />
         <meta property="og:locale" content="en_US" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="About Jusay — Meet the Founders | AI Voice Assistant" />
-        <meta name="twitter:description" content="Jusay puts voice AI in every app. Meet the founders building the universal voice layer for your desktop." />
-        <meta name="twitter:image" content="https://jusay.vercel.app/jusay-logo.png" />
+        <meta name="twitter:title" content="About Juskoe — Meet the Founders | AI Voice Assistant" />
+        <meta name="twitter:description" content="Juskoe puts voice AI in every app. Meet the founders building the universal voice layer for your desktop." />
+        <meta name="twitter:image" content="https://juskoe.in/juskoe-logo.png" />
 
         {/* Canonical */}
-        <link rel="canonical" href="https://jusay.vercel.app/about" />
+        <link rel="canonical" href="https://juskoe.in/about" />
 
         {/* Structured Data */}
         <script type="application/ld+json">
@@ -248,7 +248,7 @@ const About = () => {
                 marginRight: "auto",
               }}
             >
-              Jusay is developed by <strong style={{ color: "#2e2d2d" }}>16xStudios</strong>, a
+              Juskoe is developed by <strong style={{ color: "#2e2d2d" }}>16xStudios</strong>, a
               product studio focused on building AI-powered tools that make everyday computing faster
               and more natural.
             </motion.p>
@@ -276,18 +276,18 @@ const About = () => {
               }}
             >
               <p>
-                Jusay was born out of frustration. As developers and content creators, we spend
+                Juskoe was born out of frustration. As developers and content creators, we spend
                 hours typing every day — emails, code comments, messages, documents. We thought:
                 <em> why are we still typing when we can speak 3x faster?</em>
               </p>
               <p>
                 Existing voice-to-text tools were either too expensive ($15+/month), didn't work
-                system-wide, or lacked the intelligence to format text properly. So we built Jusay —
+                system-wide, or lacked the intelligence to format text properly. So we built Juskoe —
                 a universal voice layer that works in <strong>any</strong> app, understands context,
                 and intelligently formats your text based on what you're doing.
               </p>
               <p>
-                Today, Jusay supports a wide range of languages, three distinct modes (AI, Grammar, Notes),
+                Today, Juskoe supports a wide range of languages, three distinct modes (AI, Grammar, Notes),
                 custom dictionaries, text snippets, writing styles, and cloud sync — all in a
                 lightweight desktop app that sits quietly in your system tray until you need it.
               </p>

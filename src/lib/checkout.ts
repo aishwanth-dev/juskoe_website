@@ -23,7 +23,7 @@ interface CreateSubscriptionResponse {
 }
 
 /** Where to send the user back to after a sign-in triggered by checkout. */
-const RESUME_KEY = "jusay:resume-checkout";
+const RESUME_KEY = "juskoe:resume-checkout";
 
 /**
  * Guards against a second subscription being created by an impatient double
@@ -131,7 +131,7 @@ export const startProCheckout = async (
   if (!session?.access_token) {
     rememberCheckoutIntent(plan);
     toast.info("Sign in to continue", {
-      description: "You need a Jusay account before upgrading to Pro.",
+      description: "You need a Juskoe account before upgrading to Pro.",
     });
     if (options.onNeedsAuth) options.onNeedsAuth();
     else window.location.assign("/login");

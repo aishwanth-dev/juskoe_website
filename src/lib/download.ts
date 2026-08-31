@@ -9,13 +9,13 @@ import { recordDownload } from "@/lib/stats";
  * with each deploy. If you move the binary back to object storage, swap this
  * for the full URL.
  */
-export const DOWNLOAD_URL = "/Jusay-Setup-1.0.0.exe";
+export const DOWNLOAD_URL = "/Juskoe-Setup-1.0.0.exe";
 
 /** Only one build is shipped today, but the intent is stored as a target. */
 export type DownloadTarget = "windows";
 
-/** sessionStorage key, mirroring the `jusay:resume-checkout` intent pattern. */
-const RESUME_KEY = "jusay:resume-download";
+/** sessionStorage key, mirroring the `juskoe:resume-checkout` intent pattern. */
+const RESUME_KEY = "juskoe:resume-download";
 
 const isTarget = (value: string | null): value is DownloadTarget => value === "windows";
 
@@ -119,7 +119,7 @@ export const requestDownload = async (
   startDownload(options.open);
   if (notify) {
     toast.success("Your download is starting…", {
-      description: "Jusay Setup 1.0.0 for Windows.",
+      description: "Juskoe Setup 1.0.0 for Windows.",
     });
   }
   return true;
@@ -134,7 +134,7 @@ export const resumePendingDownload = (options: RequestDownloadOptions = {}): boo
   startDownload(options.open);
   if (options.notify ?? true) {
     toast.success("Your download is starting…", {
-      description: "Jusay Setup 1.0.0 for Windows.",
+      description: "Juskoe Setup 1.0.0 for Windows.",
     });
   }
   return true;

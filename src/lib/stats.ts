@@ -11,7 +11,7 @@ import { supabase } from "@/lib/supabase";
  *
  * `members` counts people signed up through any method (Google, email, …)
  * rather than download-button clicks: a click fires before anyone commits and
- * one person can repeat it, whereas signing in is the real "using jusay"
+ * one person can repeat it, whereas signing in is the real "using Juskoe"
  * moment, and the download is login-gated so every member passed through it.
  *
  * Each field is independent: a field is null when its RPC is unavailable or
@@ -47,14 +47,14 @@ export const fetchPublicStats = async (): Promise<PublicStats | null> => {
   } else {
     const reason =
       memberRes.status === "rejected" ? memberRes.reason : memberRes.value.error;
-    console.error("[jusay] get_member_count failed:", reason);
+    console.error("[juskoe] get_member_count failed:", reason);
   }
 
   if (proRes.status === "fulfilled" && !proRes.value.error) {
     proMembers = toNumber(proRes.value.data);
   } else {
     const reason = proRes.status === "rejected" ? proRes.reason : proRes.value.error;
-    console.error("[jusay] get_pro_member_count failed:", reason);
+    console.error("[juskoe] get_pro_member_count failed:", reason);
   }
 
   if (members === null && proMembers === null) return null;
@@ -73,6 +73,6 @@ export const recordDownload = async (platform = "windows"): Promise<void> => {
   try {
     await supabase.rpc("record_download", { p_platform: platform });
   } catch (err) {
-    console.error("[jusay] recordDownload failed:", err);
+    console.error("[juskoe] recordDownload failed:", err);
   }
 };

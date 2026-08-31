@@ -14,7 +14,7 @@ import { resumePendingDownload } from "@/lib/download";
  * session and then forwards the user on.
  *
  * This is intentionally separate from the desktop hand-off page at
- * /auth/callback/index.html, which relays tokens to the local Jusay app.
+ * /auth/callback/index.html, which relays tokens to the local Juskoe app.
  */
 const TIMEOUT_MS = 12000;
 
@@ -35,9 +35,9 @@ const AuthCallback = () => {
   const [timedOut, setTimedOut] = useState(false);
 
   useEffect(() => {
-    document.title = "Signing you in — Jusay";
+    document.title = "Signing you in — Juskoe";
     return () => {
-      document.title = "Jusay";
+      document.title = "Juskoe";
     };
   }, []);
 

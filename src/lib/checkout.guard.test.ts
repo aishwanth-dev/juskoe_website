@@ -30,7 +30,7 @@ const { startProCheckout } = await import("@/lib/checkout");
 
 const SESSION = {
   access_token: "token-abc",
-  user: { id: "user-1", email: "paid@jusay.in" },
+  user: { id: "user-1", email: "paid@juskoe.in" },
 };
 
 const proEntitlement = {

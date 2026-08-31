@@ -64,7 +64,7 @@ vi.mock("@/lib/entitlement", () => ({
 
 const { AuthProvider, useAuth } = await import("@/hooks/useAuth");
 
-const SESSION = { user: { id: "user-1", email: "paid@jusay.in" }, access_token: "t" };
+const SESSION = { user: { id: "user-1", email: "paid@juskoe.in" }, access_token: "t" };
 
 const Probe = () => {
   const { isPro, loading, entitlement } = useAuth();

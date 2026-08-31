@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
 
 /**
- * THE canonical Pro entitlement rule for Jusay.
+ * THE canonical Pro entitlement rule for Juskoe.
  *
  * The desktop app implements the identical rule. If you change anything here,
  * the desktop app has to change with it or the two clients will disagree about
@@ -116,7 +116,7 @@ export const decideEntitlement = (
     // make the mismatch loud so it can be chased in the backend.
     const nearest = rows[0] ?? null;
     console.warn(
-      "[jusay] entitlement mismatch: profiles.plan is 'pro' but no active/unexpired " +
+      "[juskoe] entitlement mismatch: profiles.plan is 'pro' but no active/unexpired " +
         "subscription row was found. Honouring Pro from the profile. " +
         `rows=${rows.length}` +
         (nearest ? ` latestStatus=${nearest.status} latestEnd=${nearest.current_period_end}` : "")
@@ -152,11 +152,11 @@ export const resolveEntitlement = async (userId: string | null | undefined): Pro
   ]);
 
   if (profileResult.error) {
-    console.error("[jusay] entitlement: profiles read failed:", profileResult.error.message);
+    console.error("[juskoe] entitlement: profiles read failed:", profileResult.error.message);
   }
   if (subscriptionResult.error) {
     console.error(
-      "[jusay] entitlement: subscriptions read failed:",
+      "[juskoe] entitlement: subscriptions read failed:",
       subscriptionResult.error.message
     );
   }

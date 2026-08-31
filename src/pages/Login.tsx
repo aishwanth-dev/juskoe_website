@@ -104,9 +104,9 @@ const Login = () => {
   const pendingDownload = useMemo(hasPendingDownload, []);
 
   useEffect(() => {
-    document.title = "Sign in — Jusay";
+    document.title = "Sign in — Juskoe";
     return () => {
-      document.title = "Jusay";
+      document.title = "Juskoe";
     };
   }, []);
 
@@ -285,8 +285,8 @@ const Login = () => {
           }}
         >
           <img
-            src="/jusay-mark.png"
-            alt="Jusay logo"
+            src="/juskoe-mark.png"
+            alt="Juskoe logo"
             style={{ height: 28, width: 28 }}
             draggable={false}
           />
@@ -302,12 +302,12 @@ const Login = () => {
             marginBottom: 8,
           }}
         >
-          {mode === "signup" ? "Create your Jusay account" : "Sign in to Jusay"}
+          {mode === "signup" ? "Create your Juskoe account" : "Sign in to Juskoe"}
         </h1>
         <p style={{ fontSize: 14, lineHeight: 1.7, color: "rgba(46,45,45,0.6)", marginBottom: 24 }}>
           {pendingDownload
             ? "Sign in and your download starts automatically."
-            : "Manage your plan, sync your notes and download Jusay for Windows."}
+            : "Manage your plan, sync your notes and download Juskoe for Windows."}
         </p>
 
         <button

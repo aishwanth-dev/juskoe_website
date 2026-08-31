@@ -138,7 +138,7 @@ const OverlayPillDemo = () => {
                     letterSpacing: "0.01em",
                   }}
                 >
-                  Jusay
+                  Juskoe
                 </motion.span>
               </AnimatePresence>
             )}
@@ -226,7 +226,7 @@ const Hero = () => {
         >
           <div className="badge-purple">
             <span className="w-1.5 h-1.5 rounded-full bg-[#7C3AED] animate-pulse" />
-            Jusay — Press a key. Speak. Done.
+            Juskoe — Press a key. Speak. Done.
           </div>
         </motion.div>
 
@@ -260,7 +260,7 @@ const Hero = () => {
           transition={{ duration: 0.7, delay: 0.45 }}
         >
           <BlurText
-            text="Jusay is a system-wide voice layer. Press a hotkey, speak naturally, and get polished text pasted anywhere instantly."
+            text="Juskoe is a system-wide voice layer. Press a hotkey, speak naturally, and get polished text pasted anywhere instantly."
             delay={60}
             className="text-lg md:text-xl text-[#2e2d2d]/60 max-w-2xl mx-auto mb-10 leading-relaxed justify-center"
             direction="bottom"
@@ -322,7 +322,7 @@ const Hero = () => {
         >
           <img
             src={appHero}
-            alt="Jusay app interface"
+            alt="Juskoe app interface"
             className="w-full rounded-t-2xl"
             style={{ display: "block", minHeight: 200, transform: "scale(1.02)", transformOrigin: "top center" }}
           />

@@ -29,7 +29,7 @@ const CTA = () => {
 
         <div className="flex justify-center mb-8 mt-4">
           <BlurText
-            text="Download Jusay and experience voice-first productivity. Works on Windows and Mac."
+            text="Download Juskoe and experience voice-first productivity. Works on Windows and Mac."
             delay={50}
             className="text-[#2e2d2d]/55 text-lg max-w-xl justify-center"
             direction="bottom"

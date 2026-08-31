@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import logo from "@/assets/jusay-logo.png";
+import logo from "@/assets/juskoe-logo.png";
 import { Twitter, Mail } from "lucide-react";
 
 const footerLinks = {
@@ -27,7 +27,7 @@ const footerLinks = {
 
 const socialLinks = [
   { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Mail, href: "mailto:support@jusay.app", label: "Email" },
+  { icon: Mail, href: "mailto:support@Juskoe.app", label: "Email" },
 ];
 
 /* Letter-by-letter hover glow — NO shine animation */
@@ -83,9 +83,9 @@ const Footer = () => {
           {/* Brand column */}
           <div style={{ gridColumn: "span 2" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-              <img src={logo} alt="JUSAY" style={{ height: 28, width: 28 }} />
+              <img src={logo} alt="Juskoe" style={{ height: 28, width: 28 }} />
               <span style={{ fontSize: 22, letterSpacing: "-0.01em" }}>
-                {"JUSAY.".split("").map((char, i) => (
+                {"Juskoe.".split("").map((char, i) => (
                   <GlowLetter key={i} char={char} />
                 ))}
               </span>
@@ -181,7 +181,7 @@ const Footer = () => {
           }}
         >
           <p style={{ fontSize: 12, color: "rgba(46,45,45,0.35)", margin: 0 }}>
-            © {new Date().getFullYear()} JUSAY. All rights reserved.
+            © {new Date().getFullYear()} Juskoe. All rights reserved.
           </p>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             {socialLinks.map((social) => (

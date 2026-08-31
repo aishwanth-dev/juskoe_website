@@ -45,7 +45,7 @@ vi.mock("@/hooks/useAuth", async () => {
         return next;
       }, []);
       return {
-        user: { id: "user-1", email: "paid@jusay.in", user_metadata: {} },
+        user: { id: "user-1", email: "paid@juskoe.in", user_metadata: {} },
         session: null,
         profile: null,
         entitlement,
