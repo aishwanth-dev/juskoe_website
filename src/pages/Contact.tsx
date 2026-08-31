@@ -8,8 +8,8 @@ const contactInfo = [
   {
     icon: Mail,
     label: "Email",
-    value: "support@jusay.vercel.app",
-    href: "mailto:support@jusay.vercel.app",
+    value: "support@jusay.app",
+    href: "mailto:support@jusay.app",
   },
   {
     icon: Phone,
@@ -36,8 +36,8 @@ const Contact = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const mailto = `mailto:support@jusay.vercel.app?subject=${encodeURIComponent(
-      formData.subject || "JUSAY Inquiry"
+    const mailto = `mailto:support@jusay.app?subject=${encodeURIComponent(
+      formData.subject || "Jusay Inquiry"
     )}&body=${encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`
     )}`;
@@ -190,7 +190,7 @@ const Contact = () => {
                 {[
                   { icon: Twitter, href: "#", label: "Twitter" },
                   { icon: Linkedin, href: "https://www.linkedin.com/in/aishwanth/", label: "LinkedIn" },
-                  { icon: Mail, href: "mailto:support@jusay.vercel.app", label: "Email" },
+                  { icon: Mail, href: "mailto:support@jusay.app", label: "Email" },
                 ].map((s) => (
                   <a
                     key={s.label}

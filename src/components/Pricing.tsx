@@ -2,6 +2,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, Zap, Crown, Star, Globe, Sparkles } from "lucide-react";
 import { useState, useEffect } from "react";
 import ShinyText from "./ShinyText";
+import { requestDownload } from "@/lib/download";
+import { startProCheckout } from "@/lib/checkout";
+import { useAuth } from "@/hooks/useAuth";
 
 /* ── Location-aware pricing ── */
 const useIsIndia = () => {
@@ -59,8 +62,8 @@ const getPlans = (isIndia: boolean) => [
     label: "Pro Plan",
     price: null,
     period: null,
-    monthlyPrice: isIndia ? "₹49" : "$2",
-    yearlyPrice: null,
+    monthlyPrice: isIndia ? "₹359" : "$10",
+    yearlyPrice: isIndia ? "₹300" : "$8",
 
     icon: Crown,
     color: "#7C3AED",
@@ -84,9 +87,86 @@ const getPlans = (isIndia: boolean) => [
   },
 ];
 
+/* ── Billing toggle ── */
+const BillingToggle = ({
+  isAnnual,
+  onToggle,
+}: {
+  isAnnual: boolean;
+  onToggle: () => void;
+}) => (
+  <div className="flex justify-center">
+    <div className="relative flex items-center gap-3">
+      <span
+        className="text-sm font-semibold transition-colors duration-300"
+        style={{ color: !isAnnual ? "#2e2d2d" : "#2e2d2d50" }}
+      >
+        Monthly
+      </span>
+      <button
+        onClick={onToggle}
+        className="relative w-14 h-7 rounded-full transition-all duration-300 flex-shrink-0"
+        style={{
+          background: isAnnual
+            ? "linear-gradient(135deg, #7C3AED, #a78bfa)"
+            : "#c4c4c4",
+          boxShadow: isAnnual
+            ? "0 0 16px rgba(124,58,237,0.45), 0 0 4px rgba(124,58,237,0.3)"
+            : "inset 0 1px 3px rgba(0,0,0,0.1)",
+        }}
+      >
+        <motion.div
+          className="absolute top-0.5 w-6 h-6 bg-white rounded-full"
+          layout
+          style={{
+            left: isAnnual ? 30 : 2,
+            boxShadow: isAnnual
+              ? "0 2px 8px rgba(124,58,237,0.3)"
+              : "0 1px 4px rgba(0,0,0,0.15)",
+          }}
+          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        />
+      </button>
+      <span
+        className="text-sm font-semibold transition-colors duration-300"
+        style={{ color: isAnnual ? "#7C3AED" : "#2e2d2d50" }}
+      >
+        Annual
+      </span>
+      {/* Absolute so it doesn't shift the centered toggle */}
+      <span
+        className="absolute left-full ml-3 text-[10px] font-bold px-2 py-1 rounded-full whitespace-nowrap transition-all duration-300"
+        style={{
+          background: isAnnual ? "rgba(124,58,237,0.1)" : "transparent",
+          color: isAnnual ? "#7C3AED" : "transparent",
+          transform: isAnnual ? "scale(1)" : "scale(0.85)",
+          opacity: isAnnual ? 1 : 0,
+        }}
+      >
+        SAVE MORE
+      </span>
+    </div>
+  </div>
+);
+
 /* ── Pricing section ── */
 const Pricing = () => {
   const isIndia = useIsIndia();
+  const [isAnnual, setIsAnnual] = useState(false);
+  const { profile } = useAuth();
+
+  // Free tier → login-gated download. Pro tier → login-gated checkout for the
+  // currently toggled billing period. Both resume automatically after sign-in.
+  const handleCta = (isProPlan: boolean) => {
+    if (isProPlan) {
+      void startProCheckout({
+        plan: isAnnual ? "pro_annual" : "pro_monthly",
+        fullName: profile?.full_name ?? null,
+      });
+    } else {
+      void requestDownload();
+    }
+  };
   const plans = getPlans(isIndia);
 
   return (
@@ -154,6 +234,18 @@ const Pricing = () => {
           >
             Start free. Upgrade when you're ready. No surprises.
           </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
+            <BillingToggle
+              isAnnual={isAnnual}
+              onToggle={() => setIsAnnual(!isAnnual)}
+            />
+          </motion.div>
         </div>
 
         {/* ── Cards ── */}
@@ -161,8 +253,13 @@ const Pricing = () => {
           {plans.map((plan, i) => {
             const Icon = plan.icon;
             const isPro = plan.popular;
-            const displayPrice = plan.price ?? plan.monthlyPrice ?? "";
-            const displayPeriod = plan.period ?? "/mo";
+            const displayPrice =
+              plan.price ??
+              (isAnnual ? plan.yearlyPrice : plan.monthlyPrice) ??
+              "";
+            const displayPeriod =
+              plan.period ??
+              (isAnnual ? "/mo (billed annually)" : "/mo");
 
             return (
               <motion.div
@@ -274,8 +371,9 @@ const Pricing = () => {
                   </div>
 
                   {/* ── CTA — always at same vertical position ── */}
-                  <motion.a
-                    href="https://firebasestorage.googleapis.com/v0/b/JUSAY-7698d.firebasestorage.app/o/JUSAY%20Setup%201.0.0.exe?alt=media&token=28f7ccbe-c1e6-4996-9e13-45700324f5f3"
+                  <motion.button
+                    type="button"
+                    onClick={() => handleCta(isPro)}
                     whileHover={
                       isPro
                         ? {
@@ -286,7 +384,7 @@ const Pricing = () => {
                         : { scale: 1.03, backgroundColor: "#2e2d2d", color: "#ffffff" }
                     }
                     whileTap={{ scale: 0.97 }}
-                    className="inline-flex items-center justify-center w-full py-3 text-sm font-bold mb-5 transition-all"
+                    className="inline-flex items-center justify-center w-full py-3 text-sm font-bold mb-5 transition-all cursor-pointer"
                     style={{
                       borderRadius: 10,
                       ...(isPro
@@ -305,7 +403,7 @@ const Pricing = () => {
                   >
                     {isPro && <Sparkles className="w-4 h-4 mr-2" />}
                     {plan.cta}
-                  </motion.a>
+                  </motion.button>
 
                   {/* Divider */}
                   <div

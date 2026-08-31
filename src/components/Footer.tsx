@@ -27,7 +27,7 @@ const footerLinks = {
 
 const socialLinks = [
   { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Mail, href: "mailto:support@jusay.vercel.app", label: "Email" },
+  { icon: Mail, href: "mailto:support@jusay.app", label: "Email" },
 ];
 
 /* Letter-by-letter hover glow — NO shine animation */
@@ -98,7 +98,7 @@ const Footer = () => {
             </p>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               <motion.a
-                href="https://firebasestorage.googleapis.com/v0/b/JUSAY-7698d.firebasestorage.app/o/JUSAY%20Setup%201.0.0.exe?alt=media&token=28f7ccbe-c1e6-4996-9e13-45700324f5f3"
+                href="https://firebasestorage.googleapis.com/v0/b/juskoe-7698d.firebasestorage.app/o/Juskoe%20Setup%201.0.0.exe?alt=media&token=28f7ccbe-c1e6-4996-9e13-45700324f5f3"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
                 style={{

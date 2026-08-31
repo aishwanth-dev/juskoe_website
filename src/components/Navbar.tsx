@@ -5,9 +5,14 @@ import { useState, useCallback } from "react";
 import logo from "@/assets/jusay-logo.png";
 import StarBorder from "./StarBorder";
 import "./StarBorder.css";
+import { useAuth } from "@/hooks/useAuth";
+import { requestDownload } from "@/lib/download";
 
-const DOWNLOAD_URL =
-  "https://firebasestorage.googleapis.com/v0/b/JUSAY-7698d.firebasestorage.app/o/JUSAY%20Setup%201.0.0.exe?alt=media&token=28f7ccbe-c1e6-4996-9e13-45700324f5f3";
+/* Download is login-gated: signed out → /login, then it resumes automatically. */
+const handleDownloadClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  e.preventDefault();
+  void requestDownload();
+};
 
 const navItems = [
   { label: "Features", href: "#features" },
@@ -18,6 +23,13 @@ const navItems = [
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { session, profile, isPro } = useAuth();
+
+  // Avatar source: Google picture if we have one, else the email's first letter.
+  const metadata = (session?.user?.user_metadata ?? {}) as Record<string, string | undefined>;
+  const accountEmail = profile?.email ?? session?.user?.email ?? "";
+  const avatarUrl = profile?.avatar_url ?? metadata.avatar_url ?? metadata.picture ?? "";
+  const avatarInitial = (accountEmail.trim()[0] ?? "J").toUpperCase();
 
   // Robust scroll handler — works on both home and subpages
   const handleNavClick = useCallback(
@@ -58,35 +70,64 @@ const Navbar = () => {
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          style={{ width: "100%", maxWidth: 680 }}
+          className="w-full md:w-auto"
+          style={{ maxWidth: 760 }}
         >
-          <StarBorder color="#7C3AED" speed="6s">
+          <StarBorder color="#7C3AED" speed="6s" className="nav-fit">
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
+                gap: 4,
                 padding: "14px 20px",
               }}
             >
-              {/* Logo */}
-              <Link to="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", flexShrink: 0 }}>
-                <img src={logo} alt="JUSAY" style={{ height: 28, width: 28 }} />
-                <span style={{ lineHeight: 1, fontSize: 18 }}>
-                  <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, color: "#2e2d2d" }}>jus</span>
-                  <span style={{ fontFamily: "'Times New Roman', Times, Georgia, serif", fontStyle: "italic", fontWeight: 700, color: "#2e2d2d" }}>
-                    koe.
+              {/* Left: logo + nav links grouped together */}
+              <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+                {/* Logo */}
+                <Link to="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", flexShrink: 0, userSelect: "none", WebkitUserSelect: "none" }}>
+                  <img src={logo} alt="Juskoe" style={{ height: 28, width: 28, WebkitUserDrag: "none" } as React.CSSProperties} draggable={false} />
+                  <span style={{ lineHeight: 1, fontSize: 18 }}>
+                    <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 800, color: "#2e2d2d" }}>jus</span>
+                    <span style={{ fontFamily: "'Times New Roman', Times, Georgia, serif", fontStyle: "italic", fontWeight: 700, color: "#2e2d2d" }}>
+                      koe.
+                    </span>
                   </span>
-                </span>
-              </Link>
+                </Link>
 
-              {/* Desktop nav */}
-              <div className="hidden md:flex" style={{ alignItems: "center", gap: 4 }}>
-                {navItems.map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    onClick={(e) => handleNavClick(e, item.href)}
+                {/* Desktop nav */}
+                <div className="hidden md:flex" style={{ alignItems: "center", gap: 4 }}>
+                  {navItems.map((item) => (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      onClick={(e) => handleNavClick(e, item.href)}
+                      style={{
+                        fontSize: 14,
+                        color: "rgba(46,45,45,0.55)",
+                        padding: "6px 14px",
+                        fontWeight: 500,
+                        borderRadius: 8,
+                        textDecoration: "none",
+                        transition: "all 0.2s",
+                        cursor: "pointer",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = "#7C3AED";
+                        e.currentTarget.style.backgroundColor = "rgba(124,58,237,0.06)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = "rgba(46,45,45,0.55)";
+                        e.currentTarget.style.backgroundColor = "transparent";
+                      }}
+                    >
+                      {item.label}
+                    </a>
+                  ))}
+                  <Link
+                    to="/about"
+                    onClick={() => setMobileOpen(false)}
                     style={{
                       fontSize: 14,
                       color: "rgba(46,45,45,0.55)",
@@ -106,15 +147,120 @@ const Navbar = () => {
                       e.currentTarget.style.backgroundColor = "transparent";
                     }}
                   >
-                    {item.label}
-                  </a>
-                ))}
+                    About us
+                  </Link>
+                </div>
               </div>
 
               {/* Right side */}
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                {/* Auth control — "Sign in" when signed out, avatar + plan badge when signed in */}
+                {session ? (
+                  <Link
+                    to="/account"
+                    onClick={() => setMobileOpen(false)}
+                    aria-label={`Your account — ${isPro ? "Pro" : "Free"} plan`}
+                    title={accountEmail ? `${accountEmail} · ${isPro ? "Pro" : "Free"}` : undefined}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 6,
+                      padding: "3px 8px",
+                      borderRadius: 8,
+                      textDecoration: "none",
+                      transition: "all 0.2s",
+                      cursor: "pointer",
+                      whiteSpace: "nowrap",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "rgba(124,58,237,0.06)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "transparent";
+                    }}
+                  >
+                    {avatarUrl ? (
+                      <img
+                        src={avatarUrl}
+                        alt=""
+                        referrerPolicy="no-referrer"
+                        draggable={false}
+                        style={{
+                          width: 24,
+                          height: 24,
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                          flexShrink: 0,
+                          border: "1px solid rgba(124,58,237,0.25)",
+                        }}
+                      />
+                    ) : (
+                      <span
+                        aria-hidden="true"
+                        style={{
+                          width: 24,
+                          height: 24,
+                          borderRadius: "50%",
+                          flexShrink: 0,
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          background: "rgba(124,58,237,0.12)",
+                          color: "#7C3AED",
+                          fontSize: 12,
+                          fontWeight: 800,
+                          lineHeight: 1,
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {avatarInitial}
+                      </span>
+                    )}
+                    <span
+                      style={{
+                        padding: "2px 5px",
+                        borderRadius: 5,
+                        fontSize: 9,
+                        fontWeight: 800,
+                        letterSpacing: "0.08em",
+                        lineHeight: 1.4,
+                        background: isPro ? "#7C3AED" : "rgba(46,45,45,0.08)",
+                        color: isPro ? "#ffffff" : "rgba(46,45,45,0.55)",
+                      }}
+                    >
+                      {isPro ? "PRO" : "FREE"}
+                    </span>
+                  </Link>
+                ) : (
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileOpen(false)}
+                    style={{
+                      fontSize: 14,
+                      color: "rgba(46,45,45,0.55)",
+                      padding: "6px 14px",
+                      fontWeight: 500,
+                      borderRadius: 8,
+                      textDecoration: "none",
+                      transition: "all 0.2s",
+                      cursor: "pointer",
+                      whiteSpace: "nowrap",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = "#7C3AED";
+                      e.currentTarget.style.backgroundColor = "rgba(124,58,237,0.06)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = "rgba(46,45,45,0.55)";
+                      e.currentTarget.style.backgroundColor = "transparent";
+                    }}
+                  >
+                    Sign in
+                  </Link>
+                )}
                 <a
-                  href={DOWNLOAD_URL}
+                  href="/login"
+                  onClick={handleDownloadClick}
                   className="hidden md:inline-flex"
                   style={{
                     alignItems: "center",
@@ -198,9 +344,60 @@ const Navbar = () => {
                 {item.label}
               </a>
             ))}
-            <a
-              href={DOWNLOAD_URL}
+            <Link
+              to="/about"
               onClick={() => setMobileOpen(false)}
+              style={{
+                fontSize: 14,
+                color: "rgba(46,45,45,0.7)",
+                fontWeight: 500,
+                padding: "8px 0",
+                borderBottom: "1px solid rgba(0,0,0,0.05)",
+                textDecoration: "none",
+                cursor: "pointer",
+              }}
+            >
+              About us
+            </Link>
+            {session ? (
+              <Link
+                to="/account"
+                onClick={() => setMobileOpen(false)}
+                style={{
+                  fontSize: 14,
+                  color: "rgba(46,45,45,0.7)",
+                  fontWeight: 500,
+                  padding: "8px 0",
+                  borderBottom: "1px solid rgba(0,0,0,0.05)",
+                  textDecoration: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Your account ({isPro ? "Pro" : "Free"})
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setMobileOpen(false)}
+                style={{
+                  fontSize: 14,
+                  color: "rgba(46,45,45,0.7)",
+                  fontWeight: 500,
+                  padding: "8px 0",
+                  borderBottom: "1px solid rgba(0,0,0,0.05)",
+                  textDecoration: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Sign in
+              </Link>
+            )}
+            <a
+              href="/login"
+              onClick={(e) => {
+                setMobileOpen(false);
+                handleDownloadClick(e);
+              }}
               style={{
                 display: "flex",
                 alignItems: "center",

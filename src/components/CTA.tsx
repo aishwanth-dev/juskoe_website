@@ -29,7 +29,7 @@ const CTA = () => {
 
         <div className="flex justify-center mb-8 mt-4">
           <BlurText
-            text="Download JUSAY and experience voice-first productivity. Works on Windows and Mac."
+            text="Download Jusay and experience voice-first productivity. Works on Windows and Mac."
             delay={50}
             className="text-[#2e2d2d]/55 text-lg max-w-xl justify-center"
             direction="bottom"
@@ -40,7 +40,7 @@ const CTA = () => {
         {/* Rectangle Framer-style buttons */}
         <motion.div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
           <motion.a
-            href="https://firebasestorage.googleapis.com/v0/b/JUSAY-7698d.firebasestorage.app/o/JUSAY%20Setup%201.0.0.exe?alt=media&token=28f7ccbe-c1e6-4996-9e13-45700324f5f3"
+            href="https://firebasestorage.googleapis.com/v0/b/juskoe-7698d.firebasestorage.app/o/Juskoe%20Setup%201.0.0.exe?alt=media&token=28f7ccbe-c1e6-4996-9e13-45700324f5f3"
             whileHover={{ scale: 1.04, boxShadow: "0 16px 50px rgba(124,58,237,0.3)" }}
             whileTap={{ scale: 0.97 }}
             className="inline-flex items-center gap-2.5 px-10 py-4 bg-[#2e2d2d] text-white font-bold text-base transition-all"

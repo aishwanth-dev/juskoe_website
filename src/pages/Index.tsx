@@ -2,6 +2,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import AppMarquee from "@/components/AppMarquee";
+import CommunityStats from "@/components/CommunityStats";
 import { ThreeModes, BuiltForYou } from "@/components/Features";
 import HowItWorks from "@/components/HowItWorks";
 
@@ -34,6 +35,9 @@ const Index = () => {
         </section>
 
         <AppMarquee />
+
+        {/* Live community counter (members + pro members) */}
+        <CommunityStats />
 
         {/* Three Modes — WITH tiles + clouds (dark bg) */}
         <section className="bg-grid" style={{ backgroundColor: "#0f0520" }}>
@@ -71,7 +75,7 @@ const Index = () => {
           </SectionClouds>
         </section>
 
-        {/* Big JUSAY text */}
+        {/* Big Jusay text */}
         <section style={{ backgroundColor: "#faf9ff" }}>
           <BigJusayText />
         </section>

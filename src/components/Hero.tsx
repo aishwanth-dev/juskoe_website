@@ -138,7 +138,7 @@ const OverlayPillDemo = () => {
                     letterSpacing: "0.01em",
                   }}
                 >
-                  JUSAY
+                  Jusay
                 </motion.span>
               </AnimatePresence>
             )}
@@ -226,7 +226,7 @@ const Hero = () => {
         >
           <div className="badge-purple">
             <span className="w-1.5 h-1.5 rounded-full bg-[#7C3AED] animate-pulse" />
-            JUSAY — Press a key. Speak. Done.
+            Jusay — Press a key. Speak. Done.
           </div>
         </motion.div>
 
@@ -260,7 +260,7 @@ const Hero = () => {
           transition={{ duration: 0.7, delay: 0.45 }}
         >
           <BlurText
-            text="JUSAY is a system-wide voice layer. Press a hotkey, speak naturally, and get polished text pasted anywhere instantly."
+            text="Jusay is a system-wide voice layer. Press a hotkey, speak naturally, and get polished text pasted anywhere instantly."
             delay={60}
             className="text-lg md:text-xl text-[#2e2d2d]/60 max-w-2xl mx-auto mb-10 leading-relaxed justify-center"
             direction="bottom"
@@ -276,7 +276,7 @@ const Hero = () => {
           className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4"
         >
           <motion.a
-            href="https://firebasestorage.googleapis.com/v0/b/JUSAY-7698d.firebasestorage.app/o/JUSAY%20Setup%201.0.0.exe?alt=media&token=28f7ccbe-c1e6-4996-9e13-45700324f5f3"
+            href="https://firebasestorage.googleapis.com/v0/b/juskoe-7698d.firebasestorage.app/o/Juskoe%20Setup%201.0.0.exe?alt=media&token=28f7ccbe-c1e6-4996-9e13-45700324f5f3"
             whileHover={{ backgroundColor: "#2e1a0e", boxShadow: "0 8px 32px rgba(26,10,14,0.35)" }}
             whileTap={{ scale: 0.97 }}
             className="inline-flex items-center gap-2.5 px-8 py-3.5 text-white font-bold text-sm transition-all"
@@ -322,7 +322,7 @@ const Hero = () => {
         >
           <img
             src={appHero}
-            alt="JUSAY app interface"
+            alt="Jusay app interface"
             className="w-full rounded-t-2xl"
             style={{ display: "block", minHeight: 200, transform: "scale(1.02)", transformOrigin: "top center" }}
           />
