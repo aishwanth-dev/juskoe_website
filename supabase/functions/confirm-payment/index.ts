@@ -94,6 +94,7 @@ serve(async (req) => {
         const bonusDays = parseInt(subscription.notes?.bonus_days || '0', 10);
         const bonusMonth = subscription.notes?.bonus_month === 'true';
         const couponOffer = subscription.notes?.coupon_offer === 'true';
+        const couponCode = subscription.notes?.coupon_code || null;
         const notesAccessDays = parseInt(subscription.notes?.access_days || '0', 10);
 
         // ---- 3. Calculate access window ----
@@ -143,6 +144,22 @@ serve(async (req) => {
         if (profError) {
             console.error(`[confirm] profile upsert failed: ${profError.message}`);
             return jsonResponse(500, { success: false, error: 'Could not activate Pro. Please contact support.' });
+        }
+
+        // ---- Finalize the coupon reservation NOW that payment is proven ----
+        // This is the only place a coupon_redemptions row is ever marked paid.
+        // See validate-coupon for why the row is inserted as unpaid up front.
+        if (couponOffer && couponCode) {
+            const userEmail = (subscription.notes?.email || '').toLowerCase().trim();
+            if (userEmail) {
+                const { error: redeemErr } = await supabase
+                    .from('coupon_redemptions')
+                    .update({ paid: true, redeemed_at: now.toISOString() })
+                    .eq('email', userEmail)
+                    .eq('coupon_code', couponCode);
+                if (redeemErr) console.error(`[confirm] coupon redemption finalize failed: ${redeemErr.message}`);
+                else console.log(`[confirm] Coupon ${couponCode} finalized as paid for ${userEmail}`);
+            }
         }
 
         console.log(`[confirm] User ${userId} → Pro (${planType}). Ends: ${periodEnd.toISOString()}. bonusMonth=${bonusMonth} coupon=${couponOffer} upgradeBonus=${bonusDays}d`);

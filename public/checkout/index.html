@@ -232,7 +232,7 @@ cursor:pointer;color:#2e2d2d;transition:background 0.15s}
                 isCoupon=true;
                 // Amount actually charged today (paise → rupees). Falls back to
                 // the monthly upfront if the function didn't echo it.
-                var rupeesToday=Math.round((data.amount_due_now||3900)/100);
+                var rupeesToday=Math.round((data.amount_due_now||4900)/100);
                 var monthsAccess=data.months_access||2;
                 couponAmountLabel='₹'+rupeesToday;
                 couponMsg.innerHTML='<strong style="color:#059669">'+code+'</strong> — '+(data.description||(rupeesToday+' today'));

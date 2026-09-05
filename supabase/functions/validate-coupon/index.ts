@@ -10,9 +10,9 @@
 //   - Works on monthly AND annual (Option A).
 //
 // Offer mechanics (Razorpay "future start_at + upfront addon amount"):
-//   MONTHLY: charge Rs 39 today, give 2 months (60 days) of access, then the
+//   MONTHLY: charge Rs 49 today, give 2 months (60 days) of access, then the
 //            normal Rs 359/mo recurring cycle begins on day 61.
-//   ANNUAL:  charge Rs 3,339 today (39 + 11*300), give 13 months (396 days) of
+//   ANNUAL:  charge Rs 3,349 today (49 + 11*300), give 13 months (396 days) of
 //            access, then the normal Rs 3,600/yr recurring cycle begins on day 397.
 //
 // The upfront addon + future start_at combination charges ONLY the upfront
@@ -40,8 +40,8 @@ const MONTHLY_RECURRING = 35900;   // Rs 359/mo
 const ANNUAL_RECURRING = 360000;   // Rs 3,600/yr
 
 // Coupon upfront amounts charged today.
-const MONTHLY_COUPON_UPFRONT = 3900;     // Rs 39
-const ANNUAL_COUPON_UPFRONT = 333900;    // Rs 3,339  (39 + 11*300)
+const MONTHLY_COUPON_UPFRONT = 4900;     // Rs 49
+const ANNUAL_COUPON_UPFRONT = 334900;    // Rs 3,349  (49 + 11*300)
 
 // Access windows the upfront amount buys before the first recurring charge.
 const MONTHLY_ACCESS_DAYS = 60;    // 2 months
@@ -87,12 +87,23 @@ serve(async (req) => {
             Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
         );
 
-        // ---- 3. One coupon per account (any code) ----
-        // Table: coupon_redemptions (email TEXT PK, coupon_code TEXT, redeemed_at TIMESTAMPTZ)
+        // ---- 3. One coupon per account (any code) — PAID redemptions only ----
+        // Table: coupon_redemptions (email TEXT PK, coupon_code TEXT, redeemed_at
+        // TIMESTAMPTZ, paid BOOLEAN DEFAULT false). The row is inserted here as
+        // paid=false (a reservation, not a redemption) and is only flipped to
+        // paid=true by confirm-payment / the webhook once money actually moves.
+        //
+        // BUG THIS FIXES: this function used to insert the row immediately on
+        // Apply, before Razorpay ever charged anything. Applying and then
+        // abandoning checkout (or the payment simply failing) permanently burned
+        // the code for that account and made every other coupon look "already
+        // used" too — on fresh accounts that had never paid a rupee. The guard
+        // below only blocks on a row that reached paid=true.
         const { data: existing, error: checkErr } = await serviceClient
             .from('coupon_redemptions')
-            .select('coupon_code')
+            .select('coupon_code, paid')
             .eq('email', userEmail)
+            .eq('paid', true)
             .maybeSingle();
 
         if (checkErr && !checkErr.message.includes('does not exist')) {
@@ -105,11 +116,12 @@ serve(async (req) => {
             });
         }
 
-        // ---- 4. Max redemptions per coupon code (100) ----
+        // ---- 4. Max redemptions per coupon code (100), PAID only ----
         const { count: usageCount, error: countErr } = await serviceClient
             .from('coupon_redemptions')
             .select('*', { count: 'exact', head: true })
-            .eq('coupon_code', upperCode);
+            .eq('coupon_code', upperCode)
+            .eq('paid', true);
 
         if (countErr && !countErr.message.includes('does not exist')) {
             console.warn('[validate-coupon] Count check error:', countErr.message);
@@ -120,6 +132,11 @@ serve(async (req) => {
                 error: `This coupon code has reached its maximum usage limit (${MAX_REDEMPTIONS_PER_COUPON}).`,
             });
         }
+
+        // Clear out any of THIS user's earlier unpaid reservations for any code
+        // (abandoned checkouts) so re-applying doesn't collide on the email
+        // primary key below.
+        await serviceClient.from('coupon_redemptions').delete().eq('email', userEmail).eq('paid', false);
 
         // ---- 5. Read the current (unpaid) subscription + detect plan ----
         const subResponse = await fetch(`https://api.razorpay.com/v1/subscriptions/${subscription_id}`, {
@@ -244,10 +261,16 @@ serve(async (req) => {
             current_period_end: periodEnd.toISOString(),
         }, { onConflict: 'razorpay_subscription_id' });
 
-        // ---- 11. Record coupon redemption ----
+        // ---- 11. Reserve the coupon as UNPAID ----
+        // Only confirm-payment / the webhook, on proof of an actual charge,
+        // flips this row to paid=true. If the user never completes checkout,
+        // this row is harmless and gets cleared automatically on their next
+        // Apply attempt (step 4 above) — the code is never permanently burned
+        // by an abandoned or failed payment.
         await serviceClient.from('coupon_redemptions').insert({
             email: userEmail,
             coupon_code: upperCode,
+            paid: false,
         });
 
         const rupeesToday = Math.round(upfrontAmount / 100);

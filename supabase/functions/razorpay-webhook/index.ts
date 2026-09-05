@@ -126,6 +126,23 @@ serve(async (req) => {
                         updated_at: now.toISOString(),
                     }, { onConflict: 'id' });
 
+                // Finalize the coupon reservation as paid — same as confirm-payment.
+                // The webhook can be the first confirmation of a real charge (e.g.
+                // subscription.charged), so this must happen here too, not only in
+                // the client-driven confirm-payment call.
+                const couponCode = subscription.notes?.coupon_code || null;
+                if (couponOffer && couponCode) {
+                    const userEmail = (subscription.notes?.email || '').toLowerCase().trim();
+                    if (userEmail) {
+                        const { error: redeemErr } = await supabase
+                            .from('coupon_redemptions')
+                            .update({ paid: true, redeemed_at: now.toISOString() })
+                            .eq('email', userEmail)
+                            .eq('coupon_code', couponCode);
+                        if (redeemErr) console.error(`[webhook] coupon redemption finalize failed: ${redeemErr.message}`);
+                    }
+                }
+
                 console.log(`[webhook] User ${userId} → Pro. Ends ${periodEnd.toISOString()} (coupon=${couponOffer} bonusMonth=${bonusMonth})`);
                 break;
             }

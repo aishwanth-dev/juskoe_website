@@ -424,7 +424,7 @@ const Account = () => {
 
             {!isPro && !activating && (
               <p style={{ fontSize: 11, color: "rgba(46,45,45,0.4)", marginTop: 12, lineHeight: 1.6 }}>
-                New Pro users get the launch offer: {OFFER_LINE}. ₹39 today covers 2 months,
+                New Pro users get the launch offer: {OFFER_LINE}. ₹49 today covers 2 months,
                 then ₹359/month. Cancel anytime from here or the Juskoe app.
               </p>
             )}
