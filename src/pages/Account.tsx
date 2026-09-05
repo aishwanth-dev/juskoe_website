@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Wordmark from "@/components/Wordmark";
 import { useAuth } from "@/hooks/useAuth";
-import { startProCheckout } from "@/lib/checkout";
+import { startProCheckout, cancelProSubscription } from "@/lib/checkout";
 
 /** The one canonical offer line. Keep in sync with src/components/Pricing.tsx. */
 const OFFER_LINE = "Pay 1 month and Get 1 month FREE";
@@ -41,6 +41,8 @@ const Account = () => {
   const reduceMotion = useReducedMotion();
   const [upgrading, setUpgrading] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   /** True while we are waiting for a just-completed payment to land in the DB. */
   const [activating, setActivating] = useState(false);
   const pollStarted = useRef(false);
@@ -131,6 +133,22 @@ const Account = () => {
     setSigningOut(true);
     await signOut();
     navigate("/", { replace: true });
+  };
+
+  /**
+   * Cancels immediately (same semantics as the desktop app's Cancel Plan):
+   * Razorpay subscription cancelled + profile dropped to free right away,
+   * not "access until period end". Re-resolves entitlement afterward so the
+   * card below flips to Free without a page reload.
+   */
+  const handleCancelPlan = async () => {
+    setCancelling(true);
+    const ok = await cancelProSubscription();
+    if (ok) {
+      setShowCancelConfirm(false);
+      await refreshEntitlement();
+    }
+    setCancelling(false);
   };
 
   if (loading || !user) {
@@ -406,9 +424,100 @@ const Account = () => {
 
             {!isPro && !activating && (
               <p style={{ fontSize: 11, color: "rgba(46,45,45,0.4)", marginTop: 12, lineHeight: 1.6 }}>
-                New Pro users get the launch offer: {OFFER_LINE}. ₹49 today covers 2 months,
-                then ₹49/month. Cancel anytime from Juskoe app settings.
+                New Pro users get the launch offer: {OFFER_LINE}. ₹39 today covers 2 months,
+                then ₹359/month. Cancel anytime from here or the Juskoe app.
               </p>
+            )}
+
+            {/* Cancel Plan — mirrors the desktop app's Settings > Plan > Cancel
+                flow exactly: immediate cancellation, two-step confirm so it
+                can't be triggered by a stray click. */}
+            {isPro && !showCancelConfirm && (
+              <button
+                type="button"
+                onClick={() => setShowCancelConfirm(true)}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  marginTop: 16,
+                  padding: "8px 14px",
+                  borderRadius: 8,
+                  background: "transparent",
+                  border: "1px solid rgba(220,38,38,0.25)",
+                  color: "#dc2626",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  transition: "background-color 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "rgba(220,38,38,0.06)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "transparent";
+                }}
+              >
+                Cancel Plan
+              </button>
+            )}
+
+            {isPro && showCancelConfirm && (
+              <div
+                style={{
+                  marginTop: 16,
+                  padding: 16,
+                  borderRadius: 10,
+                  background: "rgba(220,38,38,0.05)",
+                  border: "1px solid rgba(220,38,38,0.2)",
+                }}
+              >
+                <p style={{ fontSize: 13, color: "#2e2d2d", lineHeight: 1.6, marginBottom: 12 }}>
+                  Are you sure? Your plan will be cancelled immediately and you'll drop to the
+                  Free plan right away — this can't be undone.
+                </p>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                  <button
+                    type="button"
+                    onClick={handleCancelPlan}
+                    disabled={cancelling}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 8,
+                      padding: "9px 16px",
+                      borderRadius: 8,
+                      background: "#dc2626",
+                      border: "none",
+                      color: "#ffffff",
+                      fontSize: 12,
+                      fontWeight: 700,
+                      cursor: cancelling ? "progress" : "pointer",
+                      opacity: cancelling ? 0.7 : 1,
+                    }}
+                  >
+                    {cancelling && <Loader2 className="animate-spin" style={{ width: 12, height: 12 }} />}
+                    {cancelling ? "Cancelling…" : "Yes, Cancel Plan"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowCancelConfirm(false)}
+                    disabled={cancelling}
+                    style={{
+                      padding: "9px 16px",
+                      borderRadius: 8,
+                      background: "transparent",
+                      border: "1px solid rgba(46,45,45,0.15)",
+                      color: "#2e2d2d",
+                      fontSize: 12,
+                      fontWeight: 700,
+                      cursor: cancelling ? "progress" : "pointer",
+                    }}
+                  >
+                    Keep my plan
+                  </button>
+                </div>
+              </div>
             )}
 
             <div

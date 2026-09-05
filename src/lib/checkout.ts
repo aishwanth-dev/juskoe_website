@@ -208,3 +208,83 @@ export const startProCheckout = async (
     inFlight = false;
   }
 };
+
+// ============================================
+// Cancel Pro subscription
+// ============================================
+
+/** Response contract of the `cancel-subscription` edge function. */
+interface CancelSubscriptionResponse {
+  success: boolean;
+  error?: string;
+}
+
+/** Guards against a double-click firing two cancel requests at once. */
+let cancelInFlight = false;
+
+/**
+ * Cancels the signed-in user's Pro subscription immediately.
+ *
+ * Mirrors the desktop app's cancel flow exactly (same edge function, same
+ * "immediate" semantics — Razorpay is cancelled and the profile drops to
+ * `free` right away, there is no "access until period end" grace window).
+ * Both clients call the identical `cancel-subscription` function, so the
+ * result is consistent no matter which one the user cancels from.
+ *
+ * Resolves to true only when the cancellation actually completed, so the
+ * caller can refresh entitlement and update its own UI state.
+ */
+export const cancelProSubscription = async (): Promise<boolean> => {
+  if (cancelInFlight) return false;
+
+  const session = await getSession();
+  if (!session?.access_token) {
+    toast.error("You need to be signed in to cancel your plan.");
+    return false;
+  }
+
+  cancelInFlight = true;
+  const toastId = toast.loading("Cancelling your Pro plan…");
+
+  try {
+    const response = await fetch(`${supabaseUrl}/functions/v1/cancel-subscription`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.access_token}`,
+      },
+    });
+
+    let data: CancelSubscriptionResponse | null = null;
+    try {
+      data = (await response.json()) as CancelSubscriptionResponse;
+    } catch {
+      data = null;
+    }
+
+    if (!response.ok || !data?.success) {
+      const message =
+        data?.error ??
+        (response.status === 401
+          ? "Your session expired. Please sign in again."
+          : `Could not cancel your plan (error ${response.status}). Please try again.`);
+      toast.error("Cancellation failed", { id: toastId, description: message });
+      return false;
+    }
+
+    toast.success("Plan cancelled", {
+      id: toastId,
+      description: "You're back on the Free plan.",
+    });
+    return true;
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Network error";
+    toast.error("Cancellation failed", {
+      id: toastId,
+      description: `${message}. Please try again in a moment.`,
+    });
+    return false;
+  } finally {
+    cancelInFlight = false;
+  }
+};
