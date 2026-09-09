@@ -18,6 +18,12 @@
 // The upfront addon + future start_at combination charges ONLY the upfront
 // amount today (Razorpay "Authentication Amount" table: future start + upfront
 // => upfront amount only), and defers the first recurring charge to start_at.
+//
+// FREE coupons (see FREE_COUPON_MONTHS below) use the SAME mechanism with the
+// upfront addon simply omitted: future start_at + no addon => Razorpay collects
+// only its autopay/mandate authentication amount at checkout (auto-refunded),
+// nothing for the subscription itself. The recurring cycle then begins at
+// start_at, i.e. after the free window.
 // ============================================
 
 // @ts-nocheck
@@ -28,9 +34,20 @@ const RAZORPAY_KEY_ID = Deno.env.get('RAZORPAY_KEY_ID')!;
 const RAZORPAY_KEY_SECRET = Deno.env.get('RAZORPAY_KEY_SECRET')!;
 
 // ---- Hardcoded coupon codes ----
-const VALID_COUPONS = ['AIS0320', 'VIS2008', 'GOV2007', 'SAI3132'];
+const VALID_COUPONS = ['AIS0320', 'VIS2008', 'GOV2007', 'SAI3132', 'AVGS0320'];
 const COUPON_EXPIRY = new Date('2026-12-31T23:59:59+05:30');
 const MAX_REDEMPTIONS_PER_COUPON = 100;
+
+// ---- 100%-off coupons: code -> number of free months ----
+// AVGS0320 gives 2 monthly cycles of Pro completely free. Nothing is charged
+// for the subscription during the free window — only Razorpay's own autopay /
+// mandate authentication amount is collected at checkout (and auto-refunded),
+// because we create the subscription with a future start_at and NO upfront
+// addon. After the free window the plan's normal recurring cycle begins.
+// Every other coupon rule (expiry, one-per-account, 100-per-code, paid-only
+// redemption tracking) applies unchanged.
+const FREE_COUPON_MONTHS: Record<string, number> = { AVGS0320: 2 };
+const FREE_MONTH_DAYS = 30;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -162,9 +179,16 @@ serve(async (req) => {
         const isAnnual = planType === 'pro_annual';
 
         // ---- 6. Choose coupon economics for the detected plan ----
+        // A 100%-off coupon (FREE_COUPON_MONTHS) overrides the upfront amount and
+        // the access window: nothing is charged today and the free window is the
+        // configured number of monthly cycles, on either plan.
+        const freeMonths = FREE_COUPON_MONTHS[upperCode] ?? 0;
+        const isFreeCoupon = freeMonths > 0;
         const recurringAmount = isAnnual ? ANNUAL_RECURRING : MONTHLY_RECURRING;
-        const upfrontAmount = isAnnual ? ANNUAL_COUPON_UPFRONT : MONTHLY_COUPON_UPFRONT;
-        const accessDays = isAnnual ? ANNUAL_ACCESS_DAYS : MONTHLY_ACCESS_DAYS;
+        const upfrontAmount = isFreeCoupon ? 0 : (isAnnual ? ANNUAL_COUPON_UPFRONT : MONTHLY_COUPON_UPFRONT);
+        const accessDays = isFreeCoupon
+            ? freeMonths * FREE_MONTH_DAYS
+            : (isAnnual ? ANNUAL_ACCESS_DAYS : MONTHLY_ACCESS_DAYS);
         const period = isAnnual ? 'yearly' : 'monthly';
         const totalCount = isAnnual ? 10 : 120;
 
@@ -217,13 +241,19 @@ serve(async (req) => {
                 quantity: 1,
                 customer_notify: 1,
                 start_at: startAt,
-                addons: [{
-                    item: {
-                        name: `Juskoe Pro — coupon ${upperCode}`,
-                        amount: upfrontAmount,   // charged once, today
-                        currency: 'INR',
-                    },
-                }],
+                // 100%-off coupon: omit the addon entirely. Future start_at with no
+                // addon means Razorpay charges only the autopay/mandate
+                // authentication amount at checkout (auto-refunded) — the free
+                // window itself costs the user nothing.
+                ...(isFreeCoupon ? {} : {
+                    addons: [{
+                        item: {
+                            name: `Juskoe Pro — coupon ${upperCode}`,
+                            amount: upfrontAmount,   // charged once, today
+                            currency: 'INR',
+                        },
+                    }],
+                }),
                 notes: {
                     user_id: userId,
                     email: userEmail,
@@ -232,6 +262,7 @@ serve(async (req) => {
                     coupon_offer: 'true',
                     access_days: String(accessDays),
                     upfront_amount: String(upfrontAmount),
+                    free_months: String(freeMonths),
                     max_redemptions: String(MAX_REDEMPTIONS_PER_COUPON),
                 },
             }),
@@ -274,19 +305,24 @@ serve(async (req) => {
         });
 
         const rupeesToday = Math.round(upfrontAmount / 100);
-        const monthsAccess = isAnnual ? 13 : 2;
+        const monthsAccess = isFreeCoupon ? freeMonths : (isAnnual ? 13 : 2);
         const nextChargeDate = periodEnd.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-        console.log(`[validate-coupon] SUCCESS: ${userEmail} used ${upperCode} on ${planType}, new sub ${newSub.id}, Rs ${rupeesToday} today, ${monthsAccess} months, next charge ${nextChargeDate}`);
+        const recurringLabel = `₹${Math.round(recurringAmount / 100)}/${isAnnual ? 'yr' : 'mo'}`;
+        console.log(`[validate-coupon] SUCCESS: ${userEmail} used ${upperCode} on ${planType}, new sub ${newSub.id}, Rs ${rupeesToday} today, ${monthsAccess} months, free=${isFreeCoupon}, next charge ${nextChargeDate}`);
 
         return json(200, {
             success: true,
             new_subscription_id: newSub.id,
             plan_type: planType,
-            amount_due_now: upfrontAmount,   // paise charged today
+            amount_due_now: upfrontAmount,   // paise charged today (0 for a free coupon)
             access_days: accessDays,
             months_access: monthsAccess,
+            free_coupon: isFreeCoupon,
+            free_months: freeMonths,
             next_charge_date: periodEnd.toISOString(),
-            description: `₹${rupeesToday} today for ${monthsAccess} months, then ₹${Math.round(recurringAmount / 100)}/${isAnnual ? 'yr' : 'mo'} from ${nextChargeDate}`,
+            description: isFreeCoupon
+                ? `${monthsAccess} months free, then ${recurringLabel} from ${nextChargeDate}`
+                : `₹${rupeesToday} today for ${monthsAccess} months, then ${recurringLabel} from ${nextChargeDate}`,
         });
 
     } catch (error) {
