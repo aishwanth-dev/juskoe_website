@@ -5,11 +5,15 @@ import { recordDownload } from "@/lib/stats";
 /**
  * Canonical Windows installer URL.
  *
- * Served as a static asset from the site's own `public/` folder, so it ships
- * with each deploy. If you move the binary back to object storage, swap this
- * for the full URL.
+ * Hosted on Firebase Storage rather than bundled in the site's `public/`
+ * folder, so shipping a new build does not require a site deploy.
+ *
+ * Because this is cross-origin, `openViaAnchor` must NOT set a `download`
+ * attribute: browsers ignore `download` for cross-origin URLs, and Firebase
+ * already serves the object with a download disposition via `alt=media`, so a
+ * plain anchor click transfers the file correctly.
  */
-export const DOWNLOAD_URL = "/Juskoe-Setup-1.0.0.exe";
+export const DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/juskoe-7698d.firebasestorage.app/o/Juskoe%20Setup%201.0.0.exe?alt=media&token=d23cd614-5a7a-4f18-b8c3-00803c0149d2";
 
 /** Only one build is shipped today, but the intent is stored as a target. */
 export type DownloadTarget = "windows";

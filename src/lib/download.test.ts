@@ -15,15 +15,18 @@ const recorder = () => {
 };
 
 describe("DOWNLOAD_URL", () => {
-  it("points at the installer bundled in the site's public/ folder", () => {
-    expect(DOWNLOAD_URL).toBe("/Juskoe-Setup-1.0.0.exe");
+  it("points at the installer hosted on Firebase Storage", () => {
+    expect(DOWNLOAD_URL).toBe(
+      "https://firebasestorage.googleapis.com/v0/b/juskoe-7698d.firebasestorage.app/o/Juskoe%20Setup%201.0.0.exe?alt=media&token=d23cd614-5a7a-4f18-b8c3-00803c0149d2"
+    );
   });
 
-  it("is a root-relative .exe path (served same-origin, no query needed)", () => {
-    const url = new URL(DOWNLOAD_URL, "https://juskoe.in");
-    expect(url.pathname).toBe("/Juskoe-Setup-1.0.0.exe");
-    expect(url.pathname.endsWith(".exe")).toBe(true);
-    expect(url.search).toBe("");
+  it("is an absolute https Firebase URL serving the .exe with alt=media", () => {
+    const url = new URL(DOWNLOAD_URL);
+    expect(url.protocol).toBe("https:");
+    expect(url.host).toBe("firebasestorage.googleapis.com");
+    expect(url.searchParams.get("alt")).toBe("media");
+    expect(decodeURIComponent(url.pathname).endsWith(".exe")).toBe(true);
   });
 });
 

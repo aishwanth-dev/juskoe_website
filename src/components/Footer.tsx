@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import logo from "@/assets/juskoe-logo.png";
 import { Twitter, Mail } from "lucide-react";
+import { DOWNLOAD_URL } from "@/lib/download";
 
 const footerLinks = {
   Product: [
@@ -98,7 +99,8 @@ const Footer = () => {
             </p>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               <motion.a
-                href="https://firebasestorage.googleapis.com/v0/b/juskoe-7698d.firebasestorage.app/o/Juskoe%20Setup%201.0.0.exe?alt=media&token=28f7ccbe-c1e6-4996-9e13-45700324f5f3"
+                // Canonical installer URL — single source of truth in src/lib/download.ts
+                href={DOWNLOAD_URL}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
                 style={{

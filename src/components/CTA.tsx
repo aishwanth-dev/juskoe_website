@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import ShinyText from "./ShinyText";
 import BlurText from "./BlurText";
+import { DOWNLOAD_URL } from "@/lib/download";
 
 const CTA = () => {
   return (
@@ -40,7 +41,8 @@ const CTA = () => {
         {/* Rectangle Framer-style buttons */}
         <motion.div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
           <motion.a
-            href="https://firebasestorage.googleapis.com/v0/b/juskoe-7698d.firebasestorage.app/o/Juskoe%20Setup%201.0.0.exe?alt=media&token=28f7ccbe-c1e6-4996-9e13-45700324f5f3"
+            // Canonical installer URL — single source of truth in src/lib/download.ts
+            href={DOWNLOAD_URL}
             whileHover={{ scale: 1.04, boxShadow: "0 16px 50px rgba(124,58,237,0.3)" }}
             whileTap={{ scale: 0.97 }}
             className="inline-flex items-center gap-2.5 px-10 py-4 bg-[#2e2d2d] text-white font-bold text-base transition-all"

@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import BlurText from "./BlurText";
 import ShinyText from "./ShinyText";
 import appHero from "@/assets/app-hero.png";
+import { DOWNLOAD_URL } from "@/lib/download";
 
 // Scrolling words that cycle through
 const aiWords = ["leave application", "cold email", "meeting summary", "product brief", "LinkedIn post"];
@@ -276,7 +277,8 @@ const Hero = () => {
           className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4"
         >
           <motion.a
-            href="https://firebasestorage.googleapis.com/v0/b/juskoe-7698d.firebasestorage.app/o/Juskoe%20Setup%201.0.0.exe?alt=media&token=28f7ccbe-c1e6-4996-9e13-45700324f5f3"
+            // Canonical installer URL — single source of truth in src/lib/download.ts
+            href={DOWNLOAD_URL}
             whileHover={{ backgroundColor: "#2e1a0e", boxShadow: "0 8px 32px rgba(26,10,14,0.35)" }}
             whileTap={{ scale: 0.97 }}
             className="inline-flex items-center gap-2.5 px-8 py-3.5 text-white font-bold text-sm transition-all"
