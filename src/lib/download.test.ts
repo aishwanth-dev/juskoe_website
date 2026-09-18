@@ -17,7 +17,7 @@ const recorder = () => {
 describe("DOWNLOAD_URL", () => {
   it("points at the installer hosted on Firebase Storage", () => {
     expect(DOWNLOAD_URL).toBe(
-      "https://firebasestorage.googleapis.com/v0/b/juskoe-7698d.firebasestorage.app/o/Juskoe%20Setup%201.0.0.exe?alt=media&token=d23cd614-5a7a-4f18-b8c3-00803c0149d2"
+      "https://firebasestorage.googleapis.com/v0/b/juskoe-7698d.firebasestorage.app/o/Juskoe%20Setup%201.0.0.exe?alt=media&token=f72ce8d0-30d5-408d-bee5-958d922bff6d"
     );
   });
 

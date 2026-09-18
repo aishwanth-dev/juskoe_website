@@ -13,7 +13,7 @@ import { recordDownload } from "@/lib/stats";
  * already serves the object with a download disposition via `alt=media`, so a
  * plain anchor click transfers the file correctly.
  */
-export const DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/juskoe-7698d.firebasestorage.app/o/Juskoe%20Setup%201.0.0.exe?alt=media&token=d23cd614-5a7a-4f18-b8c3-00803c0149d2";
+export const DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/juskoe-7698d.firebasestorage.app/o/Juskoe%20Setup%201.0.0.exe?alt=media&token=f72ce8d0-30d5-408d-bee5-958d922bff6d";
 
 /** Only one build is shipped today, but the intent is stored as a target. */
 export type DownloadTarget = "windows";
