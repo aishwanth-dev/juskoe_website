@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Copy, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const TERMINAL_COMMAND = "xattr -cr /Applications/Juskoe.app";
 
@@ -18,6 +18,18 @@ interface MacInstructionsModalProps {
  */
 const MacInstructionsModal = ({ open, onClose }: MacInstructionsModalProps) => {
   const [copied, setCopied] = useState(false);
+
+  // Lock body scroll when modal opens
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = ""; // cleanup on unmount
+    };
+  }, [open]);
 
   const handleCopy = async () => {
     try {
@@ -42,7 +54,7 @@ const MacInstructionsModal = ({ open, onClose }: MacInstructionsModalProps) => {
           style={{
             position: "fixed",
             inset: 0,
-            zIndex: 100,
+            zIndex: 9999,
             background: "rgba(20,18,24,0.55)",
             backdropFilter: "blur(4px)",
             display: "flex",

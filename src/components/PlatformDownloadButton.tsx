@@ -78,13 +78,18 @@ const PlatformDownloadButton = ({ size = "hero", onAfterClick, className, showBo
     // the background while the visitor reads the one-time setup steps.
     void requestDownload({ target: "mac", notify: false });
     setModalOpen(true);
-    dismissTimer.current = setTimeout(() => setModalOpen(false), 15000);
+    dismissTimer.current = setTimeout(() => {
+      console.log('Mac modal auto-closing after 15s');
+      setModalOpen(false);
+    }, 15000);
     onAfterClick?.();
   };
 
-  // When showBoth is true, render both Windows and Mac buttons side-by-side
+  // Define button content based on platform/showBoth
+  let buttonContent: JSX.Element;
+
   if (showBoth) {
-    return (
+    buttonContent = (
       <>
         {/* Windows button */}
         <motion.a
@@ -109,7 +114,7 @@ const PlatformDownloadButton = ({ size = "hero", onAfterClick, className, showBo
           }}
         >
           <WindowsIcon style={{ width: s.iconSize, height: s.iconSize, flexShrink: 0 }} />
-          Download for Windows
+          Download
         </motion.a>
 
         {/* Mac button */}
@@ -137,7 +142,7 @@ const PlatformDownloadButton = ({ size = "hero", onAfterClick, className, showBo
           }}
         >
           <AppleIcon style={{ width: s.iconSize, height: s.iconSize, flexShrink: 0 }} />
-          Download for Mac
+          Download
           <span
             style={{
               position: "absolute",
@@ -156,90 +161,91 @@ const PlatformDownloadButton = ({ size = "hero", onAfterClick, className, showBo
             BETA
           </span>
         </motion.a>
-
-        <MacInstructionsModal open={modalOpen} onClose={closeModal} />
       </>
     );
-  }
-
-  if (isMac) {
-    return (
-      <>
-        <motion.a
-          href="#"
-          onClick={handleMacClick}
-          whileHover={{ scale: 1.03, boxShadow: "0 12px 32px rgba(0,0,0,0.35)" }}
-          whileTap={{ scale: 0.97 }}
-          className={className}
+  } else if (isMac) {
+    buttonContent = (
+      <motion.a
+        href="#"
+        onClick={handleMacClick}
+        whileHover={{ scale: 1.03, boxShadow: "0 12px 32px rgba(0,0,0,0.35)" }}
+        whileTap={{ scale: 0.97 }}
+        className={className}
+        style={{
+          position: "relative",
+          overflow: "visible",
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: s.gap,
+          padding: s.padding,
+          background: "#0a0a0a",
+          color: "#ffffff",
+          fontSize: s.fontSize,
+          fontWeight: s.fontWeight,
+          borderRadius: s.borderRadius,
+          textDecoration: "none",
+          letterSpacing: "0.01em",
+          whiteSpace: "nowrap",
+        }}
+      >
+        <AppleIcon style={{ width: s.iconSize, height: s.iconSize, flexShrink: 0 }} />
+        Download
+        <span
           style={{
-            position: "relative",
-            overflow: "visible",
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: s.gap,
-            padding: s.padding,
-            background: "#0a0a0a",
-            color: "#ffffff",
-            fontSize: s.fontSize,
-            fontWeight: s.fontWeight,
-            borderRadius: s.borderRadius,
-            textDecoration: "none",
-            letterSpacing: "0.01em",
-            whiteSpace: "nowrap",
+            position: "absolute",
+            top: -7,
+            right: 6,
+            padding: "1.5px 5px",
+            borderRadius: 5,
+            fontSize: 9,
+            fontWeight: 800,
+            letterSpacing: "0.08em",
+            background: "#f59e0b",
+            color: "#1a1a1a",
+            lineHeight: 1.4,
           }}
         >
-          <AppleIcon style={{ width: s.iconSize, height: s.iconSize, flexShrink: 0 }} />
-          Download for Mac
-          <span
-            style={{
-              position: "absolute",
-              top: -7,
-              right: 6,
-              padding: "1.5px 5px",
-              borderRadius: 5,
-              fontSize: 9,
-              fontWeight: 800,
-              letterSpacing: "0.08em",
-              background: "#f59e0b",
-              color: "#1a1a1a",
-              lineHeight: 1.4,
-            }}
-          >
-            BETA
-          </span>
-        </motion.a>
-        <MacInstructionsModal open={modalOpen} onClose={closeModal} />
-      </>
+          BETA
+        </span>
+      </motion.a>
+    );
+  } else {
+    buttonContent = (
+      <motion.a
+        href="#"
+        onClick={handleWindowsClick}
+        whileHover={{ scale: 1.03, boxShadow: "0 12px 32px rgba(0,120,212,0.35)" }}
+        whileTap={{ scale: 0.97 }}
+        className={className}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: s.gap,
+          padding: s.padding,
+          background: "linear-gradient(135deg, #0078D4, #106EBE)",
+          color: "#ffffff",
+          fontSize: s.fontSize,
+          fontWeight: s.fontWeight,
+          borderRadius: s.borderRadius,
+          textDecoration: "none",
+          letterSpacing: "0.01em",
+          whiteSpace: "nowrap",
+        }}
+      >
+        <WindowsIcon style={{ width: s.iconSize, height: s.iconSize, flexShrink: 0 }} />
+        Download
+      </motion.a>
     );
   }
 
+  // Single modal instance at component root, always present
   return (
-    <motion.a
-      href="#"
-      onClick={handleWindowsClick}
-      whileHover={{ scale: 1.03, boxShadow: "0 12px 32px rgba(0,120,212,0.35)" }}
-      whileTap={{ scale: 0.97 }}
-      className={className}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: s.gap,
-        padding: s.padding,
-        background: "linear-gradient(135deg, #0078D4, #106EBE)",
-        color: "#ffffff",
-        fontSize: s.fontSize,
-        fontWeight: s.fontWeight,
-        borderRadius: s.borderRadius,
-        textDecoration: "none",
-        letterSpacing: "0.01em",
-        whiteSpace: "nowrap",
-      }}
-    >
-      <WindowsIcon style={{ width: s.iconSize, height: s.iconSize, flexShrink: 0 }} />
-      Download for Windows
-    </motion.a>
+    <>
+      {buttonContent}
+      <MacInstructionsModal open={modalOpen} onClose={closeModal} />
+    </>
   );
 };
 
