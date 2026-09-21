@@ -275,7 +275,7 @@ const Hero = () => {
           transition={{ duration: 0.7, delay: 0.6 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4"
         >
-          <PlatformDownloadButton size="hero" />
+          <PlatformDownloadButton size="hero" showBoth />
         </motion.div>
         <motion.p
           initial={{ opacity: 0 }}

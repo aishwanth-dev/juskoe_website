@@ -252,7 +252,9 @@ const Navbar = () => {
                     Sign in
                   </Link>
                 )}
-                <PlatformDownloadButton size="nav" className="hidden md:inline-flex" />
+                <div className="hidden md:inline-flex">
+                  <PlatformDownloadButton size="nav" />
+                </div>
                 <button
                   onClick={() => setMobileOpen(!mobileOpen)}
                   className="md:hidden"

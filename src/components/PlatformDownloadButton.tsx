@@ -38,6 +38,8 @@ interface PlatformDownloadButtonProps {
   /** Called after a successful click (e.g. to close a mobile menu) — optional */
   onAfterClick?: () => void;
   className?: string;
+  /** Show both Windows and Mac buttons side-by-side (used in Hero section) */
+  showBoth?: boolean;
 }
 
 /**
@@ -48,7 +50,7 @@ interface PlatformDownloadButtonProps {
  * (SSR/unknown UA) falls back to the Windows variant, since most non-Mac
  * visitors are Windows-ish and that's the safer default.
  */
-const PlatformDownloadButton = ({ size = "hero", onAfterClick, className }: PlatformDownloadButtonProps) => {
+const PlatformDownloadButton = ({ size = "hero", onAfterClick, className, showBoth }: PlatformDownloadButtonProps) => {
   const platform = usePlatform();
   const isMac = platform === "mac";
   const s = sizeStyles[size];
@@ -79,6 +81,86 @@ const PlatformDownloadButton = ({ size = "hero", onAfterClick, className }: Plat
     dismissTimer.current = setTimeout(() => setModalOpen(false), 15000);
     onAfterClick?.();
   };
+
+  // When showBoth is true, render both Windows and Mac buttons side-by-side
+  if (showBoth) {
+    return (
+      <>
+        {/* Windows button */}
+        <motion.a
+          href="#"
+          onClick={handleWindowsClick}
+          whileHover={{ scale: 1.03, boxShadow: "0 12px 32px rgba(0,120,212,0.35)" }}
+          whileTap={{ scale: 0.97 }}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: s.gap,
+            padding: s.padding,
+            background: "linear-gradient(135deg, #0078D4, #106EBE)",
+            color: "#ffffff",
+            fontSize: s.fontSize,
+            fontWeight: s.fontWeight,
+            borderRadius: s.borderRadius,
+            textDecoration: "none",
+            letterSpacing: "0.01em",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <WindowsIcon style={{ width: s.iconSize, height: s.iconSize, flexShrink: 0 }} />
+          Download for Windows
+        </motion.a>
+
+        {/* Mac button */}
+        <motion.a
+          href="#"
+          onClick={handleMacClick}
+          whileHover={{ scale: 1.03, boxShadow: "0 12px 32px rgba(0,0,0,0.35)" }}
+          whileTap={{ scale: 0.97 }}
+          style={{
+            position: "relative",
+            overflow: "visible",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: s.gap,
+            padding: s.padding,
+            background: "#0a0a0a",
+            color: "#ffffff",
+            fontSize: s.fontSize,
+            fontWeight: s.fontWeight,
+            borderRadius: s.borderRadius,
+            textDecoration: "none",
+            letterSpacing: "0.01em",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <AppleIcon style={{ width: s.iconSize, height: s.iconSize, flexShrink: 0 }} />
+          Download for Mac
+          <span
+            style={{
+              position: "absolute",
+              top: -7,
+              right: 6,
+              padding: "1.5px 5px",
+              borderRadius: 5,
+              fontSize: 9,
+              fontWeight: 800,
+              letterSpacing: "0.08em",
+              background: "#f59e0b",
+              color: "#1a1a1a",
+              lineHeight: 1.4,
+            }}
+          >
+            BETA
+          </span>
+        </motion.a>
+
+        <MacInstructionsModal open={modalOpen} onClose={closeModal} />
+      </>
+    );
+  }
 
   if (isMac) {
     return (
