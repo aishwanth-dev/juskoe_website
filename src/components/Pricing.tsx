@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, Zap, Crown, Star, Globe, Sparkles } from "lucide-react";
 import { useState, useEffect } from "react";
 import ShinyText from "./ShinyText";
-import { requestDownload } from "@/lib/download";
+import PlatformDownloadButton from "./PlatformDownloadButton";
 import { startProCheckout } from "@/lib/checkout";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -155,17 +155,14 @@ const Pricing = () => {
   const [isAnnual, setIsAnnual] = useState(false);
   const { profile } = useAuth();
 
-  // Free tier → login-gated download. Pro tier → login-gated checkout for the
-  // currently toggled billing period. Both resume automatically after sign-in.
-  const handleCta = (isProPlan: boolean) => {
-    if (isProPlan) {
-      void startProCheckout({
-        plan: isAnnual ? "pro_annual" : "pro_monthly",
-        fullName: profile?.full_name ?? null,
-      });
-    } else {
-      void requestDownload();
-    }
+  // Pro tier → login-gated checkout for the currently toggled billing period,
+  // resumes automatically after sign-in. Free tier's download button is
+  // PlatformDownloadButton, rendered directly in the free plan's card below.
+  const handleCta = () => {
+    void startProCheckout({
+      plan: isAnnual ? "pro_annual" : "pro_monthly",
+      fullName: profile?.full_name ?? null,
+    });
   };
   const plans = getPlans(isIndia);
 
@@ -371,39 +368,29 @@ const Pricing = () => {
                   </div>
 
                   {/* ── CTA — always at same vertical position ── */}
-                  <motion.button
-                    type="button"
-                    onClick={() => handleCta(isPro)}
-                    whileHover={
-                      isPro
-                        ? {
-                          scale: 1.03,
-                          boxShadow:
-                            "0 16px 50px rgba(124,58,237,0.3)",
-                        }
-                        : { scale: 1.03, backgroundColor: "#2e2d2d", color: "#ffffff" }
-                    }
-                    whileTap={{ scale: 0.97 }}
-                    className="inline-flex items-center justify-center w-full py-3 text-sm font-bold mb-5 transition-all cursor-pointer"
-                    style={{
-                      borderRadius: 10,
-                      ...(isPro
-                        ? {
-                          background:
-                            "linear-gradient(135deg, #7C3AED, #5b21b6)",
-                          color: "#fff",
-                          border: "none",
-                        }
-                        : {
-                          background: "transparent",
-                          border: "2px solid #2e2d2d",
-                          color: "#2e2d2d",
-                        }),
-                    }}
-                  >
-                    {isPro && <Sparkles className="w-4 h-4 mr-2" />}
-                    {plan.cta}
-                  </motion.button>
+                  {isPro ? (
+                    <motion.button
+                      type="button"
+                      onClick={handleCta}
+                      whileHover={{
+                        scale: 1.03,
+                        boxShadow: "0 16px 50px rgba(124,58,237,0.3)",
+                      }}
+                      whileTap={{ scale: 0.97 }}
+                      className="inline-flex items-center justify-center w-full py-3 text-sm font-bold mb-5 transition-all cursor-pointer"
+                      style={{
+                        borderRadius: 10,
+                        background: "linear-gradient(135deg, #7C3AED, #5b21b6)",
+                        color: "#fff",
+                        border: "none",
+                      }}
+                    >
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      {plan.cta}
+                    </motion.button>
+                  ) : (
+                    <PlatformDownloadButton size="pricing" className="w-full mb-5" />
+                  )}
 
                   {/* Divider */}
                   <div

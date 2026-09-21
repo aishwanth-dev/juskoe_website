@@ -1,10 +1,12 @@
 import { describe, expect, it, beforeEach } from "vitest";
 import {
   DOWNLOAD_URL,
+  MAC_DOWNLOAD_URL,
   hasPendingDownload,
   rememberDownloadIntent,
   resumePendingDownload,
   startDownload,
+  startMacDownload,
   takeDownloadIntent,
 } from "@/lib/download";
 
@@ -57,6 +59,14 @@ describe("download intent", () => {
     expect(sessionStorage.getItem("juskoe:resume-checkout")).toBeNull();
     expect(sessionStorage.getItem("juskoe:resume-download")).toBe("windows");
   });
+
+  it("round-trips the mac target once and then clears", () => {
+    rememberDownloadIntent("mac");
+    expect(hasPendingDownload()).toBe(true);
+    expect(takeDownloadIntent()).toBe("mac");
+    expect(takeDownloadIntent()).toBeNull();
+    expect(hasPendingDownload()).toBe(false);
+  });
 });
 
 describe("startDownload", () => {
@@ -64,6 +74,14 @@ describe("startDownload", () => {
     const { urls, open } = recorder();
     expect(startDownload(open)).toBe(DOWNLOAD_URL);
     expect(urls).toEqual([DOWNLOAD_URL]);
+  });
+});
+
+describe("startMacDownload", () => {
+  it("hands the canonical Mac URL to the browser", () => {
+    const { urls, open } = recorder();
+    expect(startMacDownload(open)).toBe(MAC_DOWNLOAD_URL);
+    expect(urls).toEqual([MAC_DOWNLOAD_URL]);
   });
 });
 
@@ -94,5 +112,21 @@ describe("resumePendingDownload", () => {
     const { urls, open } = recorder();
     expect(resumePendingDownload({ open, notify: false })).toBe(false);
     expect(urls).toHaveLength(0);
+  });
+
+  // Same round trip, but for a visitor who asked for the Mac build.
+  it("completes the round trip for a pending Mac download", () => {
+    const { urls, open } = recorder();
+
+    rememberDownloadIntent("mac");
+    expect(urls).toHaveLength(0);
+    expect(hasPendingDownload()).toBe(true);
+
+    expect(resumePendingDownload({ open, notify: false })).toBe(true);
+    expect(urls).toEqual([MAC_DOWNLOAD_URL]);
+
+    expect(resumePendingDownload({ open, notify: false })).toBe(false);
+    expect(urls).toEqual([MAC_DOWNLOAD_URL]);
+    expect(hasPendingDownload()).toBe(false);
   });
 });

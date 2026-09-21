@@ -6,13 +6,7 @@ import logo from "@/assets/juskoe-logo.png";
 import StarBorder from "./StarBorder";
 import "./StarBorder.css";
 import { useAuth } from "@/hooks/useAuth";
-import { requestDownload } from "@/lib/download";
-
-/* Download is login-gated: signed out → /login, then it resumes automatically. */
-const handleDownloadClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-  e.preventDefault();
-  void requestDownload();
-};
+import PlatformDownloadButton from "./PlatformDownloadButton";
 
 const navItems = [
   { label: "Features", href: "#features" },
@@ -258,34 +252,7 @@ const Navbar = () => {
                     Sign in
                   </Link>
                 )}
-                <a
-                  href="/login"
-                  onClick={handleDownloadClick}
-                  className="hidden md:inline-flex"
-                  style={{
-                    alignItems: "center",
-                    gap: 6,
-                    padding: "8px 20px",
-                    backgroundColor: "#2e2d2d",
-                    color: "#fff",
-                    fontSize: 14,
-                    fontWeight: 700,
-                    borderRadius: 8,
-                    textDecoration: "none",
-                    transition: "background 0.2s",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#5b21b6";
-                    e.currentTarget.style.transform = "scale(1.05)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "#2e2d2d";
-                    e.currentTarget.style.transform = "scale(1)";
-                  }}
-                >
-                  <svg style={{ width: 14, height: 14, flexShrink: 0 }} viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801" /></svg>
-                  Download
-                </a>
+                <PlatformDownloadButton size="nav" className="hidden md:inline-flex" />
                 <button
                   onClick={() => setMobileOpen(!mobileOpen)}
                   className="md:hidden"
@@ -392,29 +359,11 @@ const Navbar = () => {
                 Sign in
               </Link>
             )}
-            <a
-              href="/login"
-              onClick={(e) => {
-                setMobileOpen(false);
-                handleDownloadClick(e);
-              }}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 8,
-                padding: "12px 20px",
-                backgroundColor: "#2e2d2d",
-                color: "#fff",
-                fontSize: 14,
-                fontWeight: 700,
-                borderRadius: 8,
-                textDecoration: "none",
-                marginTop: 4,
-              }}
-            >
-              Download
-            </a>
+            <PlatformDownloadButton
+              size="nav"
+              onAfterClick={() => setMobileOpen(false)}
+              className="w-full"
+            />
           </motion.div>
         )}
       </AnimatePresence>
