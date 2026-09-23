@@ -67,15 +67,29 @@ const Cloud = ({
     cloud,
     containerRef,
     isMobile,
+    variant,
 }: {
     cloud: CloudConfig;
     containerRef: React.RefObject<HTMLDivElement>;
     isMobile: boolean;
+    variant: "hero" | "features" | "cta" | "usecases";
 }) => {
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start end", "end start"],
     });
+
+    // Page-level scroll (0 at the very top of the document, unaffected by
+    // section position) — only used to gate the Hero variant's initial
+    // opacity so clouds are invisible on first load and fade in as the user
+    // scrolls the page itself, not as soon as the Hero section is measured
+    // relative to its own bounds.
+    const { scrollY: pageScrollY } = useScroll();
+    const heroOpacityFromPageScroll = useTransform(
+        pageScrollY,
+        [0, 260, 520],
+        [0, 0.6, 1]
+    );
 
     // On mobile: reduce drift and use smaller sizes
     const mobileScale = isMobile ? 0.45 : 1;
@@ -87,11 +101,22 @@ const Cloud = ({
         [0, 0, cloud.scrollDrift * 0.4 * mobileDrift, cloud.scrollDrift * mobileDrift]
     );
     const y = useTransform(scrollYProgress, [0, 1], [0, cloud.yDrift * mobileDrift]);
-    const opacity = useTransform(
+
+    const sectionRelativeOpacity = useTransform(
         scrollYProgress,
         [0, 0.08, 0.35, 0.8, 1],
         isMobile ? [0, 0.5, 0.5, 0.35, 0] : [0, 1, 1, 0.7, 0]
     );
+
+    // Hero variant: gate the existing section-relative opacity curve by the
+    // page-scroll-driven fade-in, so clouds start at 0 on page load and only
+    // reach their normal curve values once the user has actually scrolled.
+    // All other variants keep their original opacity behavior, unchanged.
+    const heroGatedOpacity = useTransform(
+        [sectionRelativeOpacity, heroOpacityFromPageScroll],
+        ([sectionVal, pageVal]: number[]) => Math.min(sectionVal, pageVal)
+    );
+    const opacity = variant === "hero" ? heroGatedOpacity : sectionRelativeOpacity;
 
     return (
         <motion.img
@@ -127,7 +152,7 @@ const SectionClouds = ({ variant, children, cloudsAbove = false }: SectionClouds
     const cloudList = configs[variant] || [];
 
     const cloudElements = cloudList.map((cloud, i) => (
-        <Cloud key={`${variant}-${i}`} cloud={cloud} containerRef={ref as React.RefObject<HTMLDivElement>} isMobile={isMobile} />
+        <Cloud key={`${variant}-${i}`} cloud={cloud} containerRef={ref as React.RefObject<HTMLDivElement>} isMobile={isMobile} variant={variant} />
     ));
 
     return (
