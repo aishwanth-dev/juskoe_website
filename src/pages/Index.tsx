@@ -166,6 +166,94 @@ const Index = () => {
       <div className="min-h-screen">
         <Navbar />
 
+        {/* Crawlable product summary — visually hidden from sighted users (the
+            animated sections below convey this visually), but present as real
+            semantic HTML for search engines, AI crawlers, and screen readers.
+            Do NOT use display:none or visibility:hidden — those are sometimes
+            discounted by crawlers/accessibility tools. This uses the standard
+            "visually hidden" pattern (clipped, off-screen, but in the accessibility
+            tree and DOM). */}
+        <section
+          aria-hidden="false"
+          style={{
+            position: "absolute",
+            width: "1px",
+            height: "1px",
+            padding: 0,
+            margin: "-1px",
+            overflow: "hidden",
+            clip: "rect(0, 0, 0, 0)",
+            whiteSpace: "nowrap",
+            border: 0,
+          }}
+        >
+          <h2>Juskoe — AI Voice Dictation and Voice-to-Text for Windows and macOS</h2>
+          <p>
+            Juskoe is a system-wide AI voice dictation and voice-to-text desktop application for
+            Windows and macOS, built by 16xStudios. It is not related to the Filipino/Tagalog slang
+            expression "jusko" or "juskoe" (short for "Diyos ko", meaning "my God"). Juskoe lets you
+            press a hotkey, speak naturally in any application, and get polished, formatted text
+            pasted directly at your cursor.
+          </p>
+
+          <h2>AI Mode (hotkey F7)</h2>
+          <p>
+            AI Mode is Juskoe's most powerful mode. Speak your intent naturally — for example, "write
+            a professional email to the team about the Q4 results" or "give me a prompt to build a
+            to-do app" — and Juskoe transcribes your speech, sends it to an AI engine for smart
+            formatting and generation, and pastes the fully polished output directly at your cursor.
+            AI Mode is used for drafting emails, messages, code snippets, prompts, and structured
+            plans.
+          </p>
+
+          <h2>Grammar Mode (hotkey F8)</h2>
+          <p>
+            Grammar Mode lets you speak naturally, filler words and all — "umm", "uhh", pauses,
+            self-corrections — and Juskoe outputs clean, grammatically correct text with fixed
+            spelling, punctuation, and capitalization. It is Juskoe's fast, accurate voice-to-text
+            dictation mode for everyday writing.
+          </p>
+
+          <h2>Notes Mode (hotkey F9)</h2>
+          <p>
+            Notes Mode is Juskoe's voice notes app. Speak freely to capture ideas, to-do lists, or
+            meeting notes, and Juskoe formats your speech into readable notes saved to a local notes
+            library. Pro users get cloud sync so notes are available across devices.
+          </p>
+
+          <h2>Rewrite Mode (select text, then F7)</h2>
+          <p>
+            Rewrite Mode transforms existing text by voice. Select any text in any application, press
+            F7, and speak an instruction such as "make this more professional", "translate to
+            Spanish", or "summarize in 3 bullets" — Juskoe rewrites the selected text in place
+            according to your spoken instruction.
+          </p>
+
+          <h2>Key Features</h2>
+          <p>
+            Juskoe works system-wide across any application on Windows and macOS — email clients,
+            code editors, chat apps, word processors, and browsers. It includes custom dictionaries
+            for names and jargon, reusable text snippets, a local notes library, app-aware formatting
+            that adapts output style to the target application, and multi-language speech
+            recognition. Pro users additionally get cloud sync of their dictionary, snippets, notes,
+            and settings across devices.
+          </p>
+
+          <h2>Pricing</h2>
+          <p>
+            Juskoe's Free plan costs $0 forever, with no credit card required. It includes 25 uses
+            per day (10 AI Mode uses via F7, 15 Grammar Mode uses via F8), 200 combined uses per
+            month, local dictionary, local snippets, local notes, and app-aware formatting, with no
+            cloud sync. Juskoe Pro costs $10 per month, or $8 per month billed annually, and includes
+            unlimited AI Mode and Grammar Mode usage, longer and more detailed outputs, priority
+            processing, cloud sync across devices, higher-quality rewrites, advanced prompt
+            generation, and early access to new features.
+          </p>
+
+          <h2>Supported Platforms</h2>
+          <p>Juskoe runs on Windows 10 and later, and macOS 12 and later.</p>
+        </section>
+
         {/* Hero — tiles + purple bg + clouds */}
         <section className="bg-grid" style={{ backgroundColor: "#ede9fe" }}>
           <SectionClouds variant="hero">
