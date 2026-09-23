@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { requestDownload } from "@/lib/download";
 import { usePlatform } from "@/lib/platform";
 import MacInstructionsModal from "./MacInstructionsModal";
@@ -56,15 +56,8 @@ const PlatformDownloadButton = ({ size = "hero", onAfterClick, className, showBo
   const s = sizeStyles[size];
 
   const [modalOpen, setModalOpen] = useState(false);
-  const dismissTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const closeModal = () => {
-    if (dismissTimer.current) {
-      clearTimeout(dismissTimer.current);
-      dismissTimer.current = null;
-    }
-    setModalOpen(false);
-  };
+  const closeModal = () => setModalOpen(false);
 
   const handleWindowsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -75,15 +68,15 @@ const PlatformDownloadButton = ({ size = "hero", onAfterClick, className, showBo
   const handleMacClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     // The modal IS the feedback here, so no toast — kick the download off in
-    // the background while the visitor reads the one-time setup steps.
+    // the background while the visitor reads the one-time setup steps. The
+    // modal now owns its own close-gating countdown internally.
     void requestDownload({ target: "mac", notify: false });
     setModalOpen(true);
-    dismissTimer.current = setTimeout(() => {
-      console.log('Mac modal auto-closing after 15s');
-      setModalOpen(false);
-    }, 15000);
     onAfterClick?.();
   };
+
+  const windowsLabel = size === "nav" ? "Download" : "Download for Windows";
+  const macLabel = size === "nav" ? "Download" : "Download for Mac";
 
   // Define button content based on platform/showBoth
   let buttonContent: JSX.Element;
@@ -114,7 +107,7 @@ const PlatformDownloadButton = ({ size = "hero", onAfterClick, className, showBo
           }}
         >
           <WindowsIcon style={{ width: s.iconSize, height: s.iconSize, flexShrink: 0 }} />
-          Download
+          {windowsLabel}
         </motion.a>
 
         {/* Mac button */}
@@ -142,7 +135,7 @@ const PlatformDownloadButton = ({ size = "hero", onAfterClick, className, showBo
           }}
         >
           <AppleIcon style={{ width: s.iconSize, height: s.iconSize, flexShrink: 0 }} />
-          Download
+          {macLabel}
           <span
             style={{
               position: "absolute",
@@ -190,7 +183,7 @@ const PlatformDownloadButton = ({ size = "hero", onAfterClick, className, showBo
         }}
       >
         <AppleIcon style={{ width: s.iconSize, height: s.iconSize, flexShrink: 0 }} />
-        Download
+        {macLabel}
         <span
           style={{
             position: "absolute",
@@ -235,7 +228,7 @@ const PlatformDownloadButton = ({ size = "hero", onAfterClick, className, showBo
         }}
       >
         <WindowsIcon style={{ width: s.iconSize, height: s.iconSize, flexShrink: 0 }} />
-        Download
+        {windowsLabel}
       </motion.a>
     );
   }
