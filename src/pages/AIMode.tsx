@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -41,7 +42,25 @@ const useCases = [
 ];
 
 const AIMode = () => (
-  <div className="min-h-screen" style={{ backgroundColor: "#faf9ff" }}>
+  <>
+    <Helmet>
+      <title>AI Voice Typing Mode — Speak, Get Polished Text | Juskoe</title>
+      <meta name="description" content="AI Mode turns spoken intent into polished emails, code, and messages. Press F7 in any app on Windows or macOS and let AI voice typing do the writing." />
+      <meta name="keywords" content="AI voice typing, voice AI, AI dictation, Juskoe AI Mode, F7 hotkey, voice to text" />
+      <meta name="robots" content="index, follow" />
+      <meta property="og:title" content="AI Voice Typing Mode — Speak, Get Polished Text | Juskoe" />
+      <meta property="og:description" content="Press F7, speak your intent, and get intelligently formatted text pasted at your cursor — Juskoe's AI Mode." />
+      <meta property="og:url" content="https://juskoe.in/modes/ai" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Juskoe" />
+      <meta property="og:image" content="https://juskoe.in/juskoe-logo.png" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="AI Voice Typing Mode — Speak, Get Polished Text | Juskoe" />
+      <meta name="twitter:description" content="AI Mode: speak your intent, get polished output pasted at your cursor. Part of Juskoe's voice AI suite." />
+      <meta name="twitter:image" content="https://juskoe.in/juskoe-logo.png" />
+      <link rel="canonical" href="https://juskoe.in/modes/ai" />
+    </Helmet>
+    <div className="min-h-screen" style={{ backgroundColor: "#faf9ff" }}>
     <Navbar />
 
     {/* Hero */}
@@ -123,7 +142,8 @@ const AIMode = () => (
     </section>
 
     <Footer />
-  </div>
+    </div>
+  </>
 );
 
 export default AIMode;

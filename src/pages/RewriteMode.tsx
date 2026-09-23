@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -41,7 +42,25 @@ const useCases = [
 ];
 
 const RewriteMode = () => (
-  <div className="min-h-screen" style={{ backgroundColor: "#faf9ff" }}>
+  <>
+    <Helmet>
+      <title>Rewrite Mode — Transform Selected Text by Voice | Juskoe</title>
+      <meta name="description" content="Select any text, press F7, and speak how to change it. Rewrite Mode edits tone, translates, and summarizes text in any app with your voice." />
+      <meta name="keywords" content="voice text rewriting, AI dictation, Juskoe Rewrite Mode, voice AI editing" />
+      <meta name="robots" content="index, follow" />
+      <meta property="og:title" content="Rewrite Mode — Transform Selected Text by Voice | Juskoe" />
+      <meta property="og:description" content="Select text, speak an instruction, get it transformed — Juskoe's Rewrite Mode." />
+      <meta property="og:url" content="https://juskoe.in/modes/rewrite" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Juskoe" />
+      <meta property="og:image" content="https://juskoe.in/juskoe-logo.png" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Rewrite Mode — Transform Selected Text by Voice | Juskoe" />
+      <meta name="twitter:description" content="Transform selected text by voice — Juskoe's Rewrite Mode." />
+      <meta name="twitter:image" content="https://juskoe.in/juskoe-logo.png" />
+      <link rel="canonical" href="https://juskoe.in/modes/rewrite" />
+    </Helmet>
+    <div className="min-h-screen" style={{ backgroundColor: "#faf9ff" }}>
     <Navbar />
 
     {/* Hero */}
@@ -152,7 +171,8 @@ const RewriteMode = () => (
     </section>
 
     <Footer />
-  </div>
+    </div>
+  </>
 );
 
 export default RewriteMode;

@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -99,7 +100,23 @@ Our total liability shall not exceed the amount you paid for the Software in the
   ];
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#faf9ff" }}>
+    <>
+      <Helmet>
+        <title>Terms of Service | Juskoe</title>
+        <meta name="description" content="The terms governing your use of Juskoe's voice dictation software, Free and Pro plans, and account responsibilities." />
+        <meta name="robots" content="index, follow" />
+        <meta property="og:title" content="Terms of Service | Juskoe" />
+        <meta property="og:description" content="Terms governing your use of Juskoe's voice dictation software." />
+        <meta property="og:url" content="https://juskoe.in/terms" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Juskoe" />
+        <meta property="og:image" content="https://juskoe.in/juskoe-logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Terms of Service | Juskoe" />
+        <meta name="twitter:image" content="https://juskoe.in/juskoe-logo.png" />
+        <link rel="canonical" href="https://juskoe.in/terms" />
+      </Helmet>
+      <div className="min-h-screen" style={{ backgroundColor: "#faf9ff" }}>
       <Navbar />
 
       <section
@@ -183,7 +200,8 @@ Our total liability shall not exceed the amount you paid for the Software in the
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 

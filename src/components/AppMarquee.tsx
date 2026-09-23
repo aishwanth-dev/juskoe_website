@@ -21,7 +21,6 @@ const apps = [
   { name: "Cursor", bg: "#000000", icon: "🖱️", emoji: true },
   { name: "Antigravity", bg: "#4285F4", icon: "🚀", emoji: true },
   { name: "Emergent", bg: "#A855F7", icon: "✨", emoji: true },
-  { name: "Lovable", bg: "#FF385C", icon: "❤️", emoji: true },
   { name: "Trae", bg: "#00D4FF", icon: "⚡", emoji: true },
   { name: "Windsurf", bg: "#38BDF8", icon: "🌊", emoji: true },
 ];
@@ -46,7 +45,6 @@ const appLogos: Record<string, string> = {
   "Cursor": "/icons/cursor.svg",
   "Antigravity": "/icons/antigravity.jpg",
   "Emergent": "/icons/emergent.jpg",
-  "Lovable": "/icons/lovable.png",
   "Trae": "/icons/trae.avif",
   "Windsurf": "/icons/windsurf.jpg",
 };

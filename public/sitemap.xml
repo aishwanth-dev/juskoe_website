@@ -1,39 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://jusaywebsite.vercel.app/</loc>
+    <loc>https://juskoe.in/</loc>
+    <lastmod>2026-09-23</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://jusaywebsite.vercel.app/about</loc>
+    <loc>https://juskoe.in/about</loc>
+    <lastmod>2026-09-23</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jusaywebsite.vercel.app/modes/ai</loc>
-    <priority>0.7</priority>
+    <loc>https://juskoe.in/modes/ai</loc>
+    <lastmod>2026-09-23</lastmod>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jusaywebsite.vercel.app/modes/grammar</loc>
-    <priority>0.7</priority>
+    <loc>https://juskoe.in/modes/grammar</loc>
+    <lastmod>2026-09-23</lastmod>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jusaywebsite.vercel.app/modes/notes</loc>
-    <priority>0.7</priority>
+    <loc>https://juskoe.in/modes/notes</loc>
+    <lastmod>2026-09-23</lastmod>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jusaywebsite.vercel.app/modes/rewrite</loc>
-    <priority>0.7</priority>
+    <loc>https://juskoe.in/modes/rewrite</loc>
+    <lastmod>2026-09-23</lastmod>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jusaywebsite.vercel.app/contact</loc>
+    <loc>https://juskoe.in/contact</loc>
+    <lastmod>2026-09-23</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://jusaywebsite.vercel.app/privacy</loc>
+    <loc>https://juskoe.in/privacy</loc>
+    <lastmod>2026-09-23</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://jusaywebsite.vercel.app/terms</loc>
+    <loc>https://juskoe.in/terms</loc>
+    <lastmod>2026-09-23</lastmod>
     <priority>0.3</priority>
   </url>
 </urlset>

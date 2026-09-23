@@ -1,0 +1,77 @@
+# Juskoe
+
+> Juskoe is a system-wide AI voice dictation and voice-to-text desktop application for
+> Windows and macOS. Speak naturally in any application and Juskoe converts your speech into
+> formatted, polished text at your cursor.
+
+Note: "Juskoe" is not related to the Filipino/Tagalog slang expression "jusko"/"juskoe"
+(an exclamation derived from "Diyos ko", meaning "my God"). Juskoe is the name of this
+software product, developed by 16xStudios.
+
+## What Juskoe Is
+
+- A desktop application (not a web app, not a browser extension) for Windows and macOS.
+- Works system-wide: any text field in any application (email clients, IDEs, chat apps,
+  word processors, browsers) can receive dictated text.
+- Converts speech to text locally, then optionally routes text through an AI engine for
+  formatting, grammar correction, or rewriting depending on which mode is active.
+- Built and maintained by 16xStudios.
+
+## Modes
+
+Juskoe has three primary dictation modes, plus a fourth transform mode:
+
+- **AI Mode (hotkey F7)** — speak an intent ("write a professional email about Q4 results")
+  and Juskoe generates fully formatted output pasted at the cursor. Used for drafting emails,
+  messages, code snippets, prompts, and structured plans.
+- **Grammar Mode (hotkey F8)** — speak naturally, including filler words ("umm", "uhh"), and
+  Juskoe outputs clean, grammatically correct text with fixed spelling, punctuation, and
+  capitalization.
+- **Notes Mode (hotkey F9)** — speak freely to capture ideas, to-do lists, or meeting notes;
+  output is formatted into readable notes and saved to a local notes library (cloud sync on
+  Pro).
+- **Rewrite Mode (select text + F7)** — select existing text in any app, then speak an
+  instruction ("make this more professional", "translate to Spanish", "summarize in 3
+  bullets") to transform the selection in place.
+
+## Key Features
+
+- Custom dictionaries (user-added words/names/jargon)
+- Text snippets (saved reusable text blocks)
+- Local notes library
+- App-aware formatting (output style adapts to the target application)
+- Multi-language speech recognition
+- Cloud sync of dictionary, snippets, notes, and settings (Pro only)
+
+## Pricing
+
+Juskoe has two plans:
+
+- **Free — $0/forever.** 25 total uses/day (10 AI Mode uses via F7, 15 Grammar Mode uses via
+  F8), 200 combined uses/month. Includes local dictionary, local snippets, local notes,
+  app-aware formatting, and limited prompt generation. No cloud sync.
+- **Pro — $10/month (or $8/month billed annually).** Unlimited AI Mode and Grammar Mode
+  usage, longer/more detailed outputs, priority processing, cloud sync across devices for
+  dictionary/snippets/notes, higher-quality rewrites, advanced prompt generation, and early
+  access to new features.
+
+Pricing in India is shown in INR (₹359/month, ₹300/month billed annually) based on device
+timezone.
+
+## Supported Platforms
+
+- Windows 10 and later
+- macOS 12 and later
+
+## Links
+
+- Homepage: https://juskoe.in
+- About / team: https://juskoe.in/about
+- AI Mode: https://juskoe.in/modes/ai
+- Grammar Mode: https://juskoe.in/modes/grammar
+- Notes Mode: https://juskoe.in/modes/notes
+- Rewrite Mode: https://juskoe.in/modes/rewrite
+- Pricing: https://juskoe.in/#pricing
+- Contact: https://juskoe.in/contact
+- Privacy Policy: https://juskoe.in/privacy
+- Terms of Service: https://juskoe.in/terms

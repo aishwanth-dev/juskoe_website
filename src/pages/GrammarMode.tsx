@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -41,7 +42,25 @@ const useCases = [
 ];
 
 const GrammarMode = () => (
-  <div className="min-h-screen" style={{ backgroundColor: "#faf9ff" }}>
+  <>
+    <Helmet>
+      <title>Grammar Mode — Grammar Correction Voice Dictation | Juskoe</title>
+      <meta name="description" content="Speak naturally, filler words and all. Grammar Mode fixes spelling, punctuation, and grammar instantly. Voice-to-text dictation for Windows and macOS." />
+      <meta name="keywords" content="grammar correction voice dictation, voice to text, Juskoe Grammar Mode, F8 hotkey, speech to text" />
+      <meta name="robots" content="index, follow" />
+      <meta property="og:title" content="Grammar Mode — Grammar Correction Voice Dictation | Juskoe" />
+      <meta property="og:description" content="Speak naturally, Juskoe fixes grammar, spelling, and punctuation instantly. Voice-to-text dictation for Windows and macOS." />
+      <meta property="og:url" content="https://juskoe.in/modes/grammar" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Juskoe" />
+      <meta property="og:image" content="https://juskoe.in/juskoe-logo.png" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Grammar Mode — Grammar Correction Voice Dictation | Juskoe" />
+      <meta name="twitter:description" content="Clean, grammatically correct dictation output — Juskoe's Grammar Mode." />
+      <meta name="twitter:image" content="https://juskoe.in/juskoe-logo.png" />
+      <link rel="canonical" href="https://juskoe.in/modes/grammar" />
+    </Helmet>
+    <div className="min-h-screen" style={{ backgroundColor: "#faf9ff" }}>
     <Navbar />
 
     {/* Hero */}
@@ -146,7 +165,8 @@ const GrammarMode = () => (
     </section>
 
     <Footer />
-  </div>
+    </div>
+  </>
 );
 
 export default GrammarMode;

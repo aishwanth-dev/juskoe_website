@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
@@ -60,7 +61,23 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#faf9ff" }}>
+    <>
+      <Helmet>
+        <title>Contact Us | Juskoe</title>
+        <meta name="description" content="Get in touch with the Juskoe team for support, billing questions, or feedback on our AI voice dictation app for Windows and macOS." />
+        <meta name="robots" content="index, follow" />
+        <meta property="og:title" content="Contact Us | Juskoe" />
+        <meta property="og:description" content="Get in touch with the Juskoe team for support or feedback." />
+        <meta property="og:url" content="https://juskoe.in/contact" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Juskoe" />
+        <meta property="og:image" content="https://juskoe.in/juskoe-logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Contact Us | Juskoe" />
+        <meta name="twitter:image" content="https://juskoe.in/juskoe-logo.png" />
+        <link rel="canonical" href="https://juskoe.in/contact" />
+      </Helmet>
+      <div className="min-h-screen" style={{ backgroundColor: "#faf9ff" }}>
       <Navbar />
 
       <section
@@ -348,7 +365,8 @@ const Contact = () => {
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 

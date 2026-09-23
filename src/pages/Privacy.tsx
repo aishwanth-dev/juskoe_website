@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -87,7 +88,23 @@ To exercise these rights, contact us at support@Juskoe.app.`,
   ];
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#faf9ff" }}>
+    <>
+      <Helmet>
+        <title>Privacy Policy | Juskoe</title>
+        <meta name="description" content="How Juskoe collects, uses, and protects your data, including voice processing, cloud sync, and account information." />
+        <meta name="robots" content="index, follow" />
+        <meta property="og:title" content="Privacy Policy | Juskoe" />
+        <meta property="og:description" content="How Juskoe collects, uses, and protects your data." />
+        <meta property="og:url" content="https://juskoe.in/privacy" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Juskoe" />
+        <meta property="og:image" content="https://juskoe.in/juskoe-logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Privacy Policy | Juskoe" />
+        <meta name="twitter:image" content="https://juskoe.in/juskoe-logo.png" />
+        <link rel="canonical" href="https://juskoe.in/privacy" />
+      </Helmet>
+      <div className="min-h-screen" style={{ backgroundColor: "#faf9ff" }}>
       <Navbar />
 
       <section
@@ -173,7 +190,8 @@ To exercise these rights, contact us at support@Juskoe.app.`,
       </section>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 };
 

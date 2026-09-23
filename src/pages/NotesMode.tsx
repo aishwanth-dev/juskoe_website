@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -41,7 +42,25 @@ const useCases = [
 ];
 
 const NotesMode = () => (
-  <div className="min-h-screen" style={{ backgroundColor: "#faf9ff" }}>
+  <>
+    <Helmet>
+      <title>Notes Mode — Voice Notes App for Windows & macOS | Juskoe</title>
+      <meta name="description" content="Capture ideas, to-dos, and meeting notes by voice. Notes Mode is a system-wide voice notes app with automatic formatting and optional cloud sync." />
+      <meta name="keywords" content="voice notes app, AI dictation, Juskoe Notes Mode, F9 hotkey, voice to text notes" />
+      <meta name="robots" content="index, follow" />
+      <meta property="og:title" content="Notes Mode — Voice Notes App for Windows & macOS | Juskoe" />
+      <meta property="og:description" content="Capture ideas and notes by voice — Juskoe's Notes Mode, with optional cloud sync." />
+      <meta property="og:url" content="https://juskoe.in/modes/notes" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Juskoe" />
+      <meta property="og:image" content="https://juskoe.in/juskoe-logo.png" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Notes Mode — Voice Notes App for Windows & macOS | Juskoe" />
+      <meta name="twitter:description" content="A system-wide voice notes app — Juskoe's Notes Mode." />
+      <meta name="twitter:image" content="https://juskoe.in/juskoe-logo.png" />
+      <link rel="canonical" href="https://juskoe.in/modes/notes" />
+    </Helmet>
+    <div className="min-h-screen" style={{ backgroundColor: "#faf9ff" }}>
     <Navbar />
 
     {/* Hero */}
@@ -123,7 +142,8 @@ const NotesMode = () => (
     </section>
 
     <Footer />
-  </div>
+    </div>
+  </>
 );
 
 export default NotesMode;
