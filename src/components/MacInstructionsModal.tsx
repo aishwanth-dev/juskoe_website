@@ -21,7 +21,7 @@ interface MacInstructionsModalProps {
  *
  * The modal owns its own 15s countdown: the close control is locked (shown
  * as a countdown badge) for the first 15s, then unlocks into a clickable X.
- * It never auto-dismisses on its own — the visitor must close it.
+ * It never auto-dismisses on its own - the visitor must close it.
  */
 const MacInstructionsModal = ({ open, onClose }: MacInstructionsModalProps) => {
   const [copied, setCopied] = useState(false);
@@ -40,7 +40,7 @@ const MacInstructionsModal = ({ open, onClose }: MacInstructionsModalProps) => {
     };
   }, [open]);
 
-  // Countdown that gates the close control — resets each time the modal opens.
+  // Countdown that gates the close control - resets each time the modal opens.
   useEffect(() => {
     if (!open) {
       setSecondsLeft(COUNTDOWN_SECONDS);
@@ -72,7 +72,7 @@ const MacInstructionsModal = ({ open, onClose }: MacInstructionsModalProps) => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      /* clipboard unavailable — the command is still selectable in the code block */
+      /* clipboard unavailable - the command is still selectable in the code block */
     }
   };
 
@@ -121,7 +121,7 @@ const MacInstructionsModal = ({ open, onClose }: MacInstructionsModalProps) => {
               fontFamily: "Inter, sans-serif",
             }}
           >
-            {/* Close control — a locked countdown badge for the first 15s, then
+            {/* Close control - a locked countdown badge for the first 15s, then
                 morphs into a clickable X once canClose is true. */}
             <button
               type="button"
@@ -199,9 +199,8 @@ const MacInstructionsModal = ({ open, onClose }: MacInstructionsModalProps) => {
             </div>
 
             <p style={{ fontSize: 13.5, lineHeight: 1.6, color: "rgba(46,45,45,0.6)", margin: "0 0 20px" }}>
-              Juskoe for Mac is in beta and isn't Apple-notarized yet, so macOS Gatekeeper blocks it the first
-              time you open it. Running this command once tells your Mac to trust it — you won't need to do it
-              again.
+              Juskoe for Mac is in beta and isn't Apple-notarized yet, so Gatekeeper blocks it on first launch.
+              A one-time command fixes that. Follow the steps below in order.
             </p>
 
             {/* Steps */}
@@ -209,15 +208,20 @@ const MacInstructionsModal = ({ open, onClose }: MacInstructionsModalProps) => {
               <li style={{ display: "flex", gap: 10 }}>
                 <StepBadge n={1} />
                 <span style={{ fontSize: 13.5, color: "#2e2d2d", lineHeight: 1.5, paddingTop: 1 }}>
-                  Open <strong>Terminal</strong> — press <code style={inlineCodeStyle}>Cmd + Space</code>, type
-                  "Terminal", then press Enter.
+                  <strong>Download Juskoe</strong> - the Mac .dmg is downloading now in the background.
                 </span>
               </li>
               <li style={{ display: "flex", gap: 10 }}>
                 <StepBadge n={2} />
+                <span style={{ fontSize: 13.5, color: "#2e2d2d", lineHeight: 1.5, paddingTop: 1 }}>
+                  <strong>Install Juskoe</strong> - open the .dmg and drag Juskoe into Applications.
+                </span>
+              </li>
+              <li style={{ display: "flex", gap: 10 }}>
+                <StepBadge n={3} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <span style={{ fontSize: 13.5, color: "#2e2d2d", lineHeight: 1.5, display: "block", marginBottom: 8 }}>
-                    Paste this command and press Enter:
+                    <strong>Trust Juskoe</strong> - open Terminal and paste this command:
                   </span>
                   <div
                     style={{
@@ -263,12 +267,15 @@ const MacInstructionsModal = ({ open, onClose }: MacInstructionsModalProps) => {
                       {copied ? <Check style={{ width: 14, height: 14 }} /> : <Copy style={{ width: 14, height: 14 }} />}
                     </button>
                   </div>
+                  <span style={{ fontSize: 13.5, color: "#2e2d2d", lineHeight: 1.5, display: "block", marginTop: 8 }}>
+                    Press Enter. No message or error means it worked.
+                  </span>
                 </div>
               </li>
               <li style={{ display: "flex", gap: 10 }}>
-                <StepBadge n={3} />
+                <StepBadge n={4} />
                 <span style={{ fontSize: 13.5, color: "#2e2d2d", lineHeight: 1.5, paddingTop: 1 }}>
-                  Open <strong>Juskoe</strong> from Applications or Launchpad. That's it — one-time only.
+                  <strong>Launch Juskoe</strong> - open Applications, then Juskoe. One-time step only.
                 </span>
               </li>
             </ol>
@@ -276,7 +283,7 @@ const MacInstructionsModal = ({ open, onClose }: MacInstructionsModalProps) => {
             <p style={{ fontSize: 11.5, color: "rgba(46,45,45,0.4)", margin: 0 }}>
               {canClose
                 ? "You can close this now."
-                : "Your download will start automatically. Read the steps above — you can close this in a few seconds."}
+                : "Your download will start automatically. Read the steps above - you can close this in a few seconds."}
             </p>
           </motion.div>
         </motion.div>
@@ -285,14 +292,6 @@ const MacInstructionsModal = ({ open, onClose }: MacInstructionsModalProps) => {
   );
 
   return createPortal(modalContent, document.body);
-};
-
-const inlineCodeStyle: React.CSSProperties = {
-  fontFamily: "'SF Mono', 'Fira Code', ui-monospace, monospace",
-  fontSize: 12,
-  background: "rgba(46,45,45,0.08)",
-  padding: "1px 5px",
-  borderRadius: 4,
 };
 
 const StepBadge = ({ n }: { n: number }) => (
