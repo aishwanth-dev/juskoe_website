@@ -5,15 +5,28 @@ import { recordDownload } from "@/lib/stats";
 /**
  * Canonical Windows installer URL.
  *
- * Hosted on Firebase Storage rather than bundled in the site's `public/`
- * folder, so shipping a new build does not require a site deploy.
+ * A stable URL on our own domain: visitors never see a GitHub URL or account
+ * name in the link they click.
  *
- * Because this is cross-origin, `openViaAnchor` must NOT set a `download`
- * attribute: browsers ignore `download` for cross-origin URLs, and Firebase
- * already serves the object with a download disposition via `alt=media`, so a
+ * `vercel.json` answers this path with a 302 to the latest GitHub release
+ * asset, so the installer bytes transfer directly from GitHub to the browser —
+ * Vercel never proxies the file.
+ *
+ * Version-less on purpose: GitHub's `/releases/latest/download/<asset>` always
+ * resolves to the newest release, so shipping a new version needs no site
+ * deploy.
+ *
+ * This requires every release to contain an asset named exactly
+ * `Juskoe-Setup.exe` (a fixed-name copy of the versioned installer). The
+ * versioned file must ALSO remain in the release, because electron-updater's
+ * `latest.yml` references it for auto-updates.
+ *
+ * `openViaAnchor` must NOT set a `download` attribute: this anchor is
+ * same-origin but redirects cross-origin, where browsers ignore `download`,
+ * and GitHub serves release assets with a download disposition anyway, so a
  * plain anchor click transfers the file correctly.
  */
-export const DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/juskoe-7698d.firebasestorage.app/o/Juskoe%20Setup%201.0.0.exe?alt=media&token=f72ce8d0-30d5-408d-bee5-958d922bff6d";
+export const DOWNLOAD_URL = "https://juskoe.in/download/windows";
 
 // Mac ARM64 .dmg installer (macOS 12+, Apple Silicon optimized).
 export const MAC_DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/juskoe-7698d.firebasestorage.app/o/Juskoe-1.0.0-arm64.dmg?alt=media&token=77138c2d-2d40-4542-a15e-47250b260a7c";
@@ -109,7 +122,7 @@ export interface RequestDownloadOptions {
 }
 
 const successToastDescription = (target: DownloadTarget): string =>
-  target === "mac" ? "Juskoe for macOS." : "Juskoe Setup 1.0.0 for Windows.";
+  target === "mac" ? "Juskoe for macOS." : "Juskoe for Windows.";
 
 /**
  * The single entry point behind every Download button on the site.

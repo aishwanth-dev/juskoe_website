@@ -5,6 +5,7 @@
     { "source": "/checkout/", "destination": "/checkout/index.html" }
   ],
   "routes": [
+    { "src": "/download/windows", "status": 302, "headers": { "Location": "https://github.com/juskoeapp/juskoe.app/releases/latest/download/Juskoe-Setup.exe" } },
     { "handle": "filesystem" },
     { "src": "/auth/(.*)", "dest": "/auth/$1" },
     { "src": "/checkout/(.*)", "dest": "/checkout/$1" },
