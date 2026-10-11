@@ -8,18 +8,14 @@ import { recordDownload } from "@/lib/stats";
  * A stable URL on our own domain: visitors never see a GitHub URL or account
  * name in the link they click.
  *
- * `vercel.json` answers this path with a 302 to the latest GitHub release
- * asset, so the installer bytes transfer directly from GitHub to the browser —
- * Vercel never proxies the file.
+ * `vercel.json` routes this path to the serverless function in
+ * `api/download-windows.js`. That function reads `latest.yml` from the latest
+ * release of `juskoeapp/juskoe.app`, extracts the versioned installer
+ * filename from it, and 302s to that asset. The installer bytes then travel
+ * straight from GitHub to the browser — Vercel never proxies the file.
  *
- * Version-less on purpose: GitHub's `/releases/latest/download/<asset>` always
- * resolves to the newest release, so shipping a new version needs no site
- * deploy.
- *
- * This requires every release to contain an asset named exactly
- * `Juskoe-Setup.exe` (a fixed-name copy of the versioned installer). The
- * versioned file must ALSO remain in the release, because electron-updater's
- * `latest.yml` references it for auto-updates.
+ * Because the filename is discovered at request time, publishing a new release
+ * needs no website change and no extra asset upload.
  *
  * `openViaAnchor` must NOT set a `download` attribute: this anchor is
  * same-origin but redirects cross-origin, where browsers ignore `download`,
