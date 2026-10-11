@@ -17,7 +17,26 @@
  *   - is guaranteed present in every release, because electron-updater
  *     requires it for the desktop app's auto-update flow — nobody can ship a
  *     release without it;
- *   - its top-level `path:` field names the installer asset for that release.
+ *   - its top-level `path:` field names the installer asset for that release;
+ *   - its top-level `version:` field names the release that asset lives in.
+ *
+ * WHY THE REDIRECT IS TAG-PINNED (PRODUCTION INCIDENT, DO NOT REGRESS)
+ * --------------------------------------------------------------------
+ * This function used to redirect to `releases/latest/download/<filename>`.
+ * That URL shape is UNSAFE for the installer, because GitHub resolves the TAG
+ * (`latest`) and the FILENAME independently at request time. Vercel edge-cached
+ * a 302 holding the then-current filename `Juskoe-Setup-1.0.0.exe`; once v1.0.1
+ * was published, `latest` started resolving to tag v1.0.1 and GitHub looked for
+ * the 1.0.0 asset inside the 1.0.1 release. That asset only exists in v1.0.0,
+ * so every download 404'd on
+ * `.../releases/download/v1.0.1/Juskoe-Setup-1.0.0.exe`.
+ *
+ * The tag and the filename must therefore be resolved ATOMICALLY, from one read
+ * of one manifest, and the redirect must name the tag explicitly:
+ * `releases/download/v<version>/<filename>`. A stale cached 302 then still
+ * points at a release where that asset really exists — it is merely old, never
+ * broken. `latest/download` is kept ONLY for fetching `latest.yml`, whose name
+ * is fixed and so cannot go stale.
  *
  * The GitHub REST API (`/releases/latest`) would be the obvious alternative,
  * but unauthenticated calls are capped at 60 requests/hour PER IP, and Vercel
@@ -42,8 +61,16 @@
  * installer.
  */
 
-/** Release repo that holds the published installers. */
+/**
+ * Unversioned `latest/download` path.
+ *
+ * SAFE for `latest.yml` (fixed filename, cannot go stale). NEVER use it for the
+ * installer redirect — see the production incident in the header comment.
+ */
 const RELEASE_BASE = "https://github.com/juskoeapp/juskoe.app/releases/latest/download";
+
+/** Tag-pinned asset path; `${RELEASE_DOWNLOAD_BASE}/v<version>/<filename>`. */
+const RELEASE_DOWNLOAD_BASE = "https://github.com/juskoeapp/juskoe.app/releases/download";
 
 /** Fixed-name electron-updater manifest that names the current installer. */
 const MANIFEST_URL = `${RELEASE_BASE}/latest.yml`;
@@ -93,6 +120,25 @@ const PATH_LINE = /^path:\s*(\S+\.exe)\s*$/m;
 const URL_LINE = /^\s*-?\s*url:\s*(\S+\.exe)\s*$/m;
 
 /**
+ * Top-level `version:` line of `latest.yml`, which names the release tag.
+ *
+ * Line-anchored with no leading whitespace allowed, for the same reason as
+ * `PATH_LINE`: only the document-level key, never a nested one.
+ */
+const VERSION_LINE = /^version:\s*(\S+)\s*$/m;
+
+/**
+ * Versions we are willing to interpolate into a URL: strict semver with an
+ * optional pre-release/build suffix.
+ *
+ * This is the second half of the security boundary. The version lands in the
+ * PATH of the redirect target, so a tampered manifest claiming
+ * `version: ../../evil` must never compose a URL that escapes the release
+ * namespace.
+ */
+const SAFE_VERSION = /^[0-9]+\.[0-9]+\.[0-9]+(?:[-+][A-Za-z0-9.-]+)?$/;
+
+/**
  * Pulls the installer filename out of a `latest.yml` body.
  *
  * `path:` wins over the nested `url:` line; returns null when neither is
@@ -108,10 +154,59 @@ export function parseInstallerName(yaml) {
   return SAFE_FILENAME.test(candidate) ? candidate : null;
 }
 
-/** 302 to the newest installer; cached at Vercel's edge for 5 minutes. */
-function redirectToLatest(res, filename) {
-  res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
-  res.setHeader("Location", `${RELEASE_BASE}/${filename}`);
+/**
+ * Pulls the release version out of a `latest.yml` body.
+ *
+ * Returns null when the top-level `version:` line is missing or fails the
+ * semver guard, so callers can decide what to do rather than interpolating an
+ * untrusted value.
+ */
+export function parseVersion(yaml) {
+  if (typeof yaml !== "string") return null;
+
+  const match = yaml.match(VERSION_LINE);
+  if (!match) return null;
+
+  const candidate = match[1];
+  return SAFE_VERSION.test(candidate) ? candidate : null;
+}
+
+/**
+ * Composes the installer URL from a manifest's version + filename pair.
+ *
+ * With a usable version this is TAG-PINNED, which is the whole point of this
+ * module: the tag and filename come from the same manifest read, so a cached
+ * 302 can never map an old filename onto a newer tag.
+ *
+ * With no usable version it degrades to the unversioned `latest/download`
+ * form. That path REINTRODUCES the stale-tag bug that broke production, so it
+ * exists only as a last resort before `FALLBACK_URL` — better a URL that is
+ * right now and may go stale in five minutes than refusing the download
+ * outright. Callers should log when they take it.
+ */
+export function buildInstallerUrl(version, filename) {
+  return version
+    ? `${RELEASE_DOWNLOAD_BASE}/v${version}/${filename}`
+    : `${RELEASE_BASE}/${filename}`;
+}
+
+/**
+ * 302 to the newest installer.
+ *
+ * Edge-cached for only 60s (was 300s): a cached redirect delays a freshly
+ * published release from reaching visitors, so keep that window short and let
+ * `stale-while-revalidate` absorb the traffic while it refreshes.
+ */
+function redirectToLatest(res, version, filename) {
+  if (!version) {
+    console.warn(
+      "[download-windows] latest.yml had no usable version; " +
+        "falling back to unpinned latest/download URL (stale-tag risk)",
+    );
+  }
+
+  res.setHeader("Cache-Control", "public, s-maxage=60, stale-while-revalidate=300");
+  res.setHeader("Location", buildInstallerUrl(version, filename));
   res.statusCode = 302;
   res.end();
 }
@@ -161,5 +256,9 @@ export default async function handler(req, res) {
     return;
   }
 
-  redirectToLatest(res, filename);
+  // Resolved from the SAME manifest read as the filename, so the pair is
+  // atomic. A null version is tolerated (see `buildInstallerUrl`).
+  const version = parseVersion(yaml);
+
+  redirectToLatest(res, version, filename);
 }
