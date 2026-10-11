@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
-import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
 import Wordmark from "@/components/Wordmark";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/lib/supabase";
@@ -40,7 +40,8 @@ const friendlyAuthError = (raw: string, mode: Mode): string => {
   const message = raw.toLowerCase();
 
   if (message.includes("email not confirmed") || message.includes("not confirmed")) {
-    return "Your email isn't confirmed yet. Open the confirmation link we emailed you, then sign in.";
+    // Supabase emails a 6-digit code here, not a link, so point people at the code.
+    return "Your email isn't confirmed yet. Create your account again to get a fresh 6-digit code, then enter it to finish up.";
   }
   if (message.includes("invalid login credentials")) {
     return "That email and password don't match. Check your password, or create an account if you're new.";
@@ -93,12 +94,18 @@ const Login = () => {
   const reduceMotion = useReducedMotion();
 
   const [mode, setMode] = useState<Mode>("signin");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [googleBusy, setGoogleBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  // Supabase emails a 6-digit code after signUp, so the code gets entered here
+  // rather than sending people off to hunt for a link.
+  const [awaitingCode, setAwaitingCode] = useState(false);
+  const [code, setCode] = useState("");
 
   // A download click is what usually sends people here, so say so up front.
   const pendingDownload = useMemo(hasPendingDownload, []);
@@ -171,8 +178,13 @@ const Login = () => {
     setNotice(null);
 
     const trimmedEmail = email.trim();
+    const trimmedName = name.trim();
     if (!trimmedEmail || !password) {
       setError("Enter your email and password.");
+      return;
+    }
+    if (mode === "signup" && !trimmedName) {
+      setError("Enter your name.");
       return;
     }
 
@@ -182,7 +194,11 @@ const Login = () => {
         const { data, error: signUpError } = await supabase.auth.signUp({
           email: trimmedEmail,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/auth/web-callback` },
+          options: {
+            // Same shape the desktop app uses, so full_name lands in user metadata.
+            data: { full_name: trimmedName },
+            emailRedirectTo: `${window.location.origin}/auth/web-callback`,
+          },
         });
         if (signUpError) {
           setError(friendlyAuthError(signUpError.message, "signup"));
@@ -196,8 +212,12 @@ const Login = () => {
           return;
         }
         if (!data.session) {
+          // Confirmation is on → Supabase just emailed a 6-digit code. Move to
+          // the in-page verification step instead of asking for a link.
+          setAwaitingCode(true);
+          setCode("");
           setNotice(
-            `Check ${trimmedEmail} for a confirmation link. Once confirmed, come back and sign in.`
+            `We emailed a 6-digit code to ${trimmedEmail}. Enter it below to finish creating your account.`
           );
           setPassword("");
           return;
@@ -217,6 +237,82 @@ const Login = () => {
       // Signed in → the session effect above resumes any pending download/upgrade.
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleVerifyCode = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+    setNotice(null);
+
+    const trimmedEmail = email.trim();
+    if (code.length < 6) {
+      setError("Enter the 6-digit code from your email.");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      // Supabase labels the emailed code differently depending on which
+      // template sent it: "signup" for a signup-confirmation code, "email" for
+      // a magic-link / OTP code. We cannot tell which one the project is
+      // configured for from the browser, so try "signup" first and retry once
+      // as "email" on any error before telling the user the code is bad.
+      const { error: signupTypeError } = await supabase.auth.verifyOtp({
+        email: trimmedEmail,
+        token: code,
+        type: "signup",
+      });
+
+      let failure = signupTypeError;
+      if (failure) {
+        const { error: emailTypeError } = await supabase.auth.verifyOtp({
+          email: trimmedEmail,
+          token: code,
+          type: "email",
+        });
+        failure = emailTypeError;
+      }
+
+      if (failure) {
+        setError(
+          "That code is incorrect or expired. Check the email again or request a new one."
+        );
+        return;
+      }
+
+      // Verified → verifyOtp returns a session, and the session effect above
+      // handles the redirect plus any pending download/upgrade. Nothing to do here.
+      setNotice("Verified. Setting up your account…");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not verify that code.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleResendCode = async () => {
+    // Guarded so a double tap cannot fire two resends and trip the rate limit.
+    if (submitting) return;
+    setError(null);
+    setNotice(null);
+
+    const trimmedEmail = email.trim();
+    setSubmitting(true);
+    try {
+      const { error: resendError } = await supabase.auth.resend({
+        type: "signup",
+        email: trimmedEmail,
+      });
+      if (resendError) {
+        setError(friendlyAuthError(resendError.message, "signup"));
+        return;
+      }
+      setNotice(`New code sent to ${trimmedEmail}. It can take a moment to arrive.`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not send a new code.");
     } finally {
       setSubmitting(false);
     }
@@ -248,6 +344,8 @@ const Login = () => {
   };
 
   const busy = loading || submitting || googleBusy;
+  // Only ever reachable after a successful signUp, never in sign-in mode.
+  const showCodeStep = awaitingCode && mode === "signup";
 
   return (
     <div
@@ -365,7 +463,157 @@ const Login = () => {
           <span style={{ flex: 1, height: 1, background: "rgba(46,45,45,0.1)" }} />
         </div>
 
+        {showCodeStep ? (
+          <form onSubmit={handleVerifyCode} noValidate>
+            <div style={{ marginBottom: 18 }}>
+              <label htmlFor="login-code" style={labelStyle}>
+                6-digit code
+              </label>
+              <input
+                id="login-code"
+                name="code"
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={6}
+                autoFocus
+                required
+                value={code}
+                onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                placeholder="123456"
+                disabled={busy}
+                style={{
+                  ...inputStyle,
+                  textAlign: "center",
+                  fontSize: 20,
+                  fontWeight: 700,
+                  letterSpacing: "0.35em",
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(124,58,237,0.55)";
+                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(124,58,237,0.12)";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(46,45,45,0.15)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={busy || code.length < 6}
+              style={{
+                width: "100%",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+                padding: "12px 20px",
+                borderRadius: 10,
+                border: "none",
+                background: "linear-gradient(135deg, #7C3AED, #5b21b6)",
+                color: "#ffffff",
+                fontSize: 14,
+                fontWeight: 700,
+                cursor: busy ? "progress" : code.length < 6 ? "not-allowed" : "pointer",
+                opacity: busy || code.length < 6 ? 0.7 : 1,
+                transition: "box-shadow 0.2s, opacity 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                if (!busy && code.length === 6)
+                  e.currentTarget.style.boxShadow = "0 12px 32px rgba(124,58,237,0.28)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = "none";
+              }}
+            >
+              {submitting && <Loader2 style={{ width: 16, height: 16 }} className="animate-spin" />}
+              {submitting ? "Verifying…" : "Verify and continue"}
+            </button>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 12,
+                marginTop: 14,
+                flexWrap: "wrap",
+              }}
+            >
+              <button
+                type="button"
+                onClick={handleResendCode}
+                disabled={busy}
+                style={{
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "#7C3AED",
+                  cursor: busy ? "progress" : "pointer",
+                  fontFamily: "inherit",
+                }}
+              >
+                Resend code
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setAwaitingCode(false);
+                  setCode("");
+                  setError(null);
+                  setNotice(null);
+                }}
+                disabled={busy}
+                style={{
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  fontSize: 13,
+                  fontWeight: 500,
+                  color: "rgba(46,45,45,0.55)",
+                  cursor: busy ? "progress" : "pointer",
+                  fontFamily: "inherit",
+                }}
+              >
+                Use a different email
+              </button>
+            </div>
+          </form>
+        ) : (
         <form onSubmit={handleEmailSubmit} noValidate>
+          {mode === "signup" && (
+            <div style={{ marginBottom: 14 }}>
+              <label htmlFor="login-name" style={labelStyle}>
+                Full name
+              </label>
+              <input
+                id="login-name"
+                name="name"
+                type="text"
+                autoComplete="name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your name"
+                disabled={busy}
+                style={inputStyle}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(124,58,237,0.55)";
+                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(124,58,237,0.12)";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(46,45,45,0.15)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              />
+            </div>
+          )}
+
           <div style={{ marginBottom: 14 }}>
             <label htmlFor="login-email" style={labelStyle}>
               Email
@@ -396,27 +644,63 @@ const Login = () => {
             <label htmlFor="login-password" style={labelStyle}>
               Password
             </label>
-            <input
-              id="login-password"
-              name="password"
-              type="password"
-              autoComplete={mode === "signup" ? "new-password" : "current-password"}
-              required
-              minLength={6}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder={mode === "signup" ? "At least 6 characters" : "Your password"}
-              disabled={busy}
-              style={inputStyle}
-              onFocus={(e) => {
-                e.currentTarget.style.borderColor = "rgba(124,58,237,0.55)";
-                e.currentTarget.style.boxShadow = "0 0 0 3px rgba(124,58,237,0.12)";
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.borderColor = "rgba(46,45,45,0.15)";
-                e.currentTarget.style.boxShadow = "none";
-              }}
-            />
+            <div style={{ position: "relative" }}>
+              <input
+                id="login-password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder={mode === "signup" ? "At least 6 characters" : "Your password"}
+                disabled={busy}
+                // Extra right padding keeps the text clear of the eye button.
+                style={{ ...inputStyle, paddingRight: 42 }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(124,58,237,0.55)";
+                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(124,58,237,0.12)";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(46,45,45,0.15)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((visible) => !visible)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 40,
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  color: "rgba(46,45,45,0.5)",
+                  cursor: "pointer",
+                  transition: "color 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "#7C3AED";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "rgba(46,45,45,0.5)";
+                }}
+              >
+                {showPassword ? (
+                  <EyeOff style={{ width: 16, height: 16 }} aria-hidden="true" />
+                ) : (
+                  <Eye style={{ width: 16, height: 16 }} aria-hidden="true" />
+                )}
+              </button>
+            </div>
           </div>
 
           <button
@@ -456,7 +740,9 @@ const Login = () => {
                 : "Sign in"}
           </button>
         </form>
+        )}
 
+        {!showCodeStep && (
         <div
           style={{
             display: "flex",
@@ -509,6 +795,7 @@ const Login = () => {
             </button>
           )}
         </div>
+        )}
 
         {loading && !submitting && !googleBusy && (
           <p
