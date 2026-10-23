@@ -19,9 +19,9 @@ software product, built by its independent founding team.
 
 ## Team
 
-- Vishwajeeth Rao B — CEO
-- Aishwanth M S — CTO
-- Govind D S — Co-Founder
+- Vishwajeeth Rao B — Co-Founder & CEO
+- Aishwanth M S — Founder & CTO
+- Govind D S — Co-Founder & CMO
 
 ## Data & Privacy
 

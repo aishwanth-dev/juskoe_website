@@ -37,25 +37,48 @@ const jsonLd = {
         {
           "@type": "Person",
           "name": "Vishwajeeth Rao B",
-          "jobTitle": "CEO",
+          "jobTitle": "Co-Founder & CEO",
           "email": "vishwajeeth@juskoe.com",
           "url": "https://www.linkedin.com/in/vishwajeeth-rao-b-7a1764381/"
         },
         {
           "@type": "Person",
+          "name": "Aishwanth M S",
+          "jobTitle": "Founder & CTO",
+          "email": "aishwanth@juskoe.com",
+          "url": "https://www.linkedin.com/in/aishwanth/"
+        },
+        {
+          "@type": "Person",
           "name": "Govind D S",
-          "jobTitle": "Co-Founder",
+          "jobTitle": "Co-Founder & CMO",
           "email": "govind@juskoe.com",
           "url": "https://www.linkedin.com/in/govind-ds-162801355/"
         }
       ],
-      "cto": {
-        "@type": "Person",
-        "name": "Aishwanth M S",
-        "jobTitle": "CTO",
-        "email": "aishwanth@juskoe.com",
-        "url": "https://www.linkedin.com/in/aishwanth/"
-      },
+      "employee": [
+        {
+          "@type": "Person",
+          "name": "Vishwajeeth Rao B",
+          "jobTitle": "Co-Founder & CEO",
+          "email": "vishwajeeth@juskoe.com",
+          "url": "https://www.linkedin.com/in/vishwajeeth-rao-b-7a1764381/"
+        },
+        {
+          "@type": "Person",
+          "name": "Aishwanth M S",
+          "jobTitle": "Founder & CTO",
+          "email": "aishwanth@juskoe.com",
+          "url": "https://www.linkedin.com/in/aishwanth/"
+        },
+        {
+          "@type": "Person",
+          "name": "Govind D S",
+          "jobTitle": "Co-Founder & CMO",
+          "email": "govind@juskoe.com",
+          "url": "https://www.linkedin.com/in/govind-ds-162801355/"
+        }
+      ],
       "sameAs": [
         "https://juskoe.in",
         "https://www.linkedin.com/company/Juskoe"
