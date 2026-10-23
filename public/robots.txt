@@ -1,3 +1,5 @@
+# AI/LLM descriptor: https://juskoe.in/llms.txt
+
 User-agent: Googlebot
 Allow: /
 

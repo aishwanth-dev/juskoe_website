@@ -410,7 +410,7 @@ export const BuiltForYou = () => {
               </div>
               <div className="space-y-2 relative z-10">
                 {[
-                  { cue: "my email", value: "support@Juskoe.app" },
+                  { cue: "my email", value: "support@juskoe.com" },
                   { cue: "book a call", value: "calendly.com/Juskoe/30min" },
                   { cue: "sign off", value: "Best, Aishwanth — Founder, Juskoe" },
                 ].map((snippet, i) => (

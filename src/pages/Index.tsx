@@ -36,25 +36,25 @@ const jsonLd = {
       "founder": [
         {
           "@type": "Person",
-          "name": "Aishwanth M S",
-          "jobTitle": "CEO & Founder",
-          "email": "aishwanth@juskoe.in",
-          "url": "https://www.linkedin.com/in/aishwanth/"
+          "name": "Vishwajeeth Rao B",
+          "jobTitle": "CEO",
+          "email": "vishwajeeth@juskoe.com",
+          "url": "https://www.linkedin.com/in/vishwajeeth-rao-b-7a1764381/"
         },
         {
           "@type": "Person",
-          "name": "Vishwajeeth Rao B",
+          "name": "Govind D S",
           "jobTitle": "Co-Founder",
-          "email": "vishwajeeth@juskoe.in",
-          "url": "https://www.linkedin.com/in/vishwajeeth-rao-b-7a1764381/"
+          "email": "govind@juskoe.com",
+          "url": "https://www.linkedin.com/in/govind-ds-162801355/"
         }
       ],
       "cto": {
         "@type": "Person",
-        "name": "Govind D S",
+        "name": "Aishwanth M S",
         "jobTitle": "CTO",
-        "email": "govind@juskoe.in",
-        "url": "https://www.linkedin.com/in/govind-ds-16280135/"
+        "email": "aishwanth@juskoe.com",
+        "url": "https://www.linkedin.com/in/aishwanth/"
       },
       "sameAs": [
         "https://juskoe.in",
@@ -139,7 +139,7 @@ const Index = () => {
         <title>Juskoe — AI Voice Dictation & Voice-to-Text for Windows & macOS</title>
         <meta name="description" content="Juskoe is a system-wide voice AI assistant for Windows and macOS. Speak naturally, get polished text in any app. Free to start — AI dictation, grammar cleanup, and voice notes." />
         <meta name="keywords" content="Juskoe, voice AI, voice to text, AI dictation, speech to text, voice assistant, dictation software, system-wide dictation, Windows voice typing, macOS dictation, free voice to text" />
-        <meta name="author" content="Juskoe — 16xStudios" />
+        <meta name="author" content="Juskoe" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
 
@@ -190,7 +190,7 @@ const Index = () => {
           <h2>Juskoe — AI Voice Dictation and Voice-to-Text for Windows and macOS</h2>
           <p>
             Juskoe is a system-wide AI voice dictation and voice-to-text desktop application for
-            Windows and macOS, built by 16xStudios. It is not related to the Filipino/Tagalog slang
+            Windows and macOS, built by its independent founding team. It is not related to the Filipino/Tagalog slang
             expression "jusko" or "juskoe" (short for "Diyos ko", meaning "my God"). Juskoe lets you
             press a hotkey, speak naturally in any application, and get polished, formatted text
             pasted directly at your cursor.

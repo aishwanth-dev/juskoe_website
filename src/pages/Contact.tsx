@@ -9,14 +9,14 @@ const contactInfo = [
   {
     icon: Mail,
     label: "Email",
-    value: "support@Juskoe.app",
-    href: "mailto:support@Juskoe.app",
+    value: "support@juskoe.com",
+    href: "mailto:support@juskoe.com",
   },
   {
     icon: Phone,
     label: "Phone",
-    value: "+91 8608208309",
-    href: "tel:+918608208309",
+    value: "+91 8884543690",
+    href: "tel:+918884543690",
   },
   {
     icon: MapPin,
@@ -37,7 +37,7 @@ const Contact = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const mailto = `mailto:support@Juskoe.app?subject=${encodeURIComponent(
+    const mailto = `mailto:support@juskoe.com?subject=${encodeURIComponent(
       formData.subject || "Juskoe Inquiry"
     )}&body=${encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`
@@ -207,7 +207,7 @@ const Contact = () => {
                 {[
                   { icon: Twitter, href: "#", label: "Twitter" },
                   { icon: Linkedin, href: "https://www.linkedin.com/in/aishwanth/", label: "LinkedIn" },
-                  { icon: Mail, href: "mailto:support@Juskoe.app", label: "Email" },
+                  { icon: Mail, href: "mailto:support@juskoe.com", label: "Email" },
                 ].map((s) => (
                   <a
                     key={s.label}
@@ -241,7 +241,7 @@ const Contact = () => {
                 border: "1px solid rgba(124,58,237,0.1)",
               }}
             >
-              <p style={{ fontSize: 14, fontWeight: 700, marginBottom: 4, color: "#2e2d2d" }}>16xStudios</p>
+              <p style={{ fontSize: 14, fontWeight: 700, marginBottom: 4, color: "#2e2d2d" }}>Juskoe</p>
               <p style={{ fontSize: 13, color: "#888", lineHeight: 1.6, margin: 0 }}>
                 Building AI-powered productivity tools
               </p>

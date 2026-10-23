@@ -33,25 +33,25 @@ const values = [
 
 const founders = [
   {
-    name: "Aishwanth M S",
-    role: "CEO & Founder",
-    email: "aishwanth@juskoe.in",
-    linkedin: "https://www.linkedin.com/in/aishwanth/",
-    bio: "Aishwanth is a full-stack developer and AI entrepreneur who architected Juskoe from the ground up. As CEO, he leads product vision, engineering strategy, and the mission to make voice the universal input layer for every desktop application. He built Juskoe to solve his own productivity frustrations — and it's now relied upon by thousands of users worldwide.",
+    name: "Vishwajeeth Rao B",
+    role: "CEO",
+    email: "vishwajeeth@juskoe.com",
+    linkedin: "https://www.linkedin.com/in/vishwajeeth-rao-b-7a1764381/",
+    bio: "Vishwajeeth leads Juskoe as CEO, setting the product vision and the mission to make voice the universal input layer for every desktop application. He drives strategy, partnerships, and the overall roadmap — ensuring every feature we ship genuinely improves how people work and communicate.",
   },
   {
-    name: "Vishwajeeth Rao B",
-    role: "Co-Founder",
-    email: "vishwajeeth@juskoe.in",
-    linkedin: "https://www.linkedin.com/in/vishwajeeth-rao-b-7a1764381/",
-    bio: "Vishwajeeth brings strategic product thinking and operational excellence to Juskoe. As Co-Founder, he drives user growth, partnerships, and the overall product roadmap — ensuring every feature we ship genuinely improves how people work and communicate with voice AI technology.",
+    name: "Aishwanth M S",
+    role: "CTO",
+    email: "aishwanth@juskoe.com",
+    linkedin: "https://www.linkedin.com/in/aishwanth/",
+    bio: "Aishwanth is a full-stack developer who architected Juskoe from the ground up. As CTO, he leads the technical architecture and engineering — the AI/ML pipeline, speech-to-text inference, system-level integrations, and cloud infrastructure — delivering fast, accurate voice recognition across Windows and macOS.",
   },
   {
     name: "Govind D S",
-    role: "CTO",
-    email: "govind@juskoe.in",
-    linkedin: "https://www.linkedin.com/in/govind-ds-16280135/",
-    bio: "Govind leads the technical architecture and engineering teams at Juskoe. As CTO, he oversees the AI/ML pipeline, speech-to-text inference, system-level integrations, and cloud infrastructure — ensuring Juskoe delivers blazing-fast, accurate voice recognition across Windows and macOS with enterprise-grade reliability.",
+    role: "Co-Founder",
+    email: "govind@juskoe.com",
+    linkedin: "https://www.linkedin.com/in/govind-ds-162801355/",
+    bio: "Govind is a Co-Founder of Juskoe and a core part of the engineering team. He works across the product's system-level integrations and platform work, helping ship a reliable, responsive experience on both Windows and macOS.",
   },
 ];
 
@@ -69,25 +69,25 @@ const jsonLd = {
       "founder": [
         {
           "@type": "Person",
-          "name": "Aishwanth M S",
-          "jobTitle": "CEO & Founder",
-          "email": "aishwanth@juskoe.in",
-          "url": "https://www.linkedin.com/in/aishwanth/"
+          "name": "Vishwajeeth Rao B",
+          "jobTitle": "CEO",
+          "email": "vishwajeeth@juskoe.com",
+          "url": "https://www.linkedin.com/in/vishwajeeth-rao-b-7a1764381/"
         },
         {
           "@type": "Person",
-          "name": "Vishwajeeth Rao B",
+          "name": "Govind D S",
           "jobTitle": "Co-Founder",
-          "email": "vishwajeeth@juskoe.in",
-          "url": "https://www.linkedin.com/in/vishwajeeth-rao-b-7a1764381/"
+          "email": "govind@juskoe.com",
+          "url": "https://www.linkedin.com/in/govind-ds-162801355/"
         }
       ],
       "cto": {
         "@type": "Person",
-        "name": "Govind D S",
+        "name": "Aishwanth M S",
         "jobTitle": "CTO",
-        "email": "govind@juskoe.in",
-        "url": "https://www.linkedin.com/in/govind-ds-16280135/"
+        "email": "aishwanth@juskoe.com",
+        "url": "https://www.linkedin.com/in/aishwanth/"
       },
       "sameAs": [
         "https://juskoe.in",
@@ -103,7 +103,7 @@ const jsonLd = {
       "@type": "WebPage",
       "@id": "https://juskoe.in/about",
       "name": "About Juskoe — Meet the Founders | AI Voice Assistant",
-      "description": "Learn about Juskoe, the universal voice layer for your OS. Meet founders Aishwanth M S (CEO), Vishwajeeth Rao B (Co-Founder), and Govind D S (CTO) — the team building AI-powered voice-to-text for every desktop app.",
+      "description": "Learn about Juskoe, the universal voice layer for your OS. Meet founders Vishwajeeth Rao B (CEO), Aishwanth M S (CTO), and Govind D S (Co-Founder) — the team building AI-powered voice-to-text for every desktop app.",
       "isPartOf": { "@id": "https://juskoe.in/#website" },
       "breadcrumb": {
         "@type": "BreadcrumbList",
@@ -130,7 +130,7 @@ const jsonLd = {
           "name": "Who founded Juskoe?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Juskoe was founded by Aishwanth M S (CEO), Vishwajeeth Rao B (Co-Founder), and Govind D S (CTO) under the product studio 16xStudios."
+            "text": "Juskoe was founded by Vishwajeeth Rao B (CEO), Aishwanth M S (CTO), and Govind D S (Co-Founder)."
           }
         },
         {
@@ -167,9 +167,9 @@ const About = () => {
     <>
       <Helmet>
         <title>Juskoe</title>
-        <meta name="description" content="Learn about Juskoe, the universal voice layer for your operating system. Meet the founders — Aishwanth M S (CEO), Vishwajeeth Rao B (Co-Founder), and Govind D S (CTO). Discover how we're making voice-to-text work in every app, everywhere." />
-        <meta name="keywords" content="Juskoe, voice assistant, AI voice typing, speech to text, voice to text desktop app, system-wide dictation, Juskoe founders, Aishwanth, Vishwajeeth, Govind, 16xStudios, voice AI, desktop voice assistant, Windows voice typing, macOS dictation" />
-        <meta name="author" content="Juskoe — 16xStudios" />
+        <meta name="description" content="Learn about Juskoe, the universal voice layer for your operating system. Meet the founders — Vishwajeeth Rao B (CEO), Aishwanth M S (CTO), and Govind D S (Co-Founder). Discover how we're making voice-to-text work in every app, everywhere." />
+        <meta name="keywords" content="Juskoe, voice assistant, AI voice typing, speech to text, voice to text desktop app, system-wide dictation, Juskoe founders, Aishwanth, Vishwajeeth, Govind, voice AI, desktop voice assistant, Windows voice typing, macOS dictation" />
+        <meta name="author" content="Juskoe" />
         <meta name="robots" content="index, follow" />
         <meta name="language" content="English" />
 
@@ -248,9 +248,8 @@ const About = () => {
                 marginRight: "auto",
               }}
             >
-              Juskoe is developed by <strong style={{ color: "#2e2d2d" }}>16xStudios</strong>, a
-              product studio focused on building AI-powered tools that make everyday computing faster
-              and more natural.
+              Juskoe is built by an <strong style={{ color: "#2e2d2d" }}>independent founding team</strong> focused
+              on building AI-powered tools that make everyday computing faster and more natural.
             </motion.p>
           </div>
         </section>
@@ -410,7 +409,7 @@ const About = () => {
                 >
                   <h3 style={{ fontSize: 22, fontWeight: 700, marginBottom: 4, color: "#2e2d2d" }}>{f.name}</h3>
                   <p style={{ fontSize: 14, color: "#7C3AED", fontWeight: 600, marginBottom: 16 }}>
-                    {f.role} — 16xStudios
+                    {f.role}
                   </p>
                   <p
                     style={{
@@ -481,7 +480,7 @@ const About = () => {
               }}
             >
               <p style={{ fontSize: 14, fontWeight: 600, color: "#2e2d2d", marginBottom: 2 }}>Phone</p>
-              <p style={{ fontSize: 15, color: "#555", margin: 0 }}>+91 8608208309</p>
+              <p style={{ fontSize: 15, color: "#555", margin: 0 }}>+91 8884543690</p>
             </div>
           </motion.div>
         </section>

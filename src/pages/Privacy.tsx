@@ -11,9 +11,9 @@ const Privacy = () => {
 
 • Account Information - If you create an account, we collect your email address and display name for authentication purposes.
 
-• Voice Data - Your voice recordings are processed securely. We do not store, share, or sell your audio recordings.
+• Voice Data - Your voice input is processed to produce the text output you request. By accepting our Terms of Service and this Privacy Policy, you agree that your voice data may be used to improve and train Juskoe's models in the future.
 
-• AI Processing - When using AI features, your transcribed text is processed to format and enhance your content. This text is not permanently stored after processing.
+• AI Processing - When using AI features, your transcribed text is processed to format and enhance your content.
 
 • Usage Metrics - We track anonymous usage counts to manage plan limits. No personal content is logged.
 
@@ -35,9 +35,8 @@ const Privacy = () => {
       title: "3. Privacy & Security",
       content: `Juskoe is designed with privacy as a core principle:
 
-• Voice processing is handled securely with industry-standard practices.
-• Audio files are temporary and deleted immediately after processing.
-• No voice recordings are stored, logged, or shared with third parties.
+• Voice and text processing is handled using reasonable, industry-standard security practices.
+• We apply industry-standard safeguards to protect your data in transit and at rest.
 • The application is designed to minimize data collection while maximizing functionality.`,
     },
     {
@@ -67,7 +66,7 @@ All third-party partners are vetted for security compliance.`,
 • Opt out of cloud sync and keep all data local
 • Withdraw consent for data processing at any time
 
-To exercise these rights, contact us at support@Juskoe.app.`,
+To exercise these rights, contact us at support@juskoe.com.`,
     },
     {
       title: "7. Children's Privacy",
@@ -81,9 +80,8 @@ To exercise these rights, contact us at support@Juskoe.app.`,
       title: "9. Contact Us",
       content: `If you have questions about this privacy policy, please contact us:
 
-• Email: support@Juskoe.app
-• Phone: +91 8608208309
-• Company: 16xStudios`,
+• Email: support@juskoe.com
+• Phone: +91 8884543690`,
     },
   ];
 

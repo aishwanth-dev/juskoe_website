@@ -28,7 +28,7 @@ const footerLinks = {
 
 const socialLinks = [
   { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Mail, href: "mailto:support@Juskoe.app", label: "Email" },
+  { icon: Mail, href: "mailto:support@juskoe.com", label: "Email" },
 ];
 
 /* Letter-by-letter hover glow — NO shine animation */

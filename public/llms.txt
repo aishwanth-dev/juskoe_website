@@ -6,16 +6,27 @@
 
 Note: "Juskoe" is not related to the Filipino/Tagalog slang expression "jusko"/"juskoe"
 (an exclamation derived from "Diyos ko", meaning "my God"). Juskoe is the name of this
-software product, developed by 16xStudios.
+software product, built by its independent founding team.
 
 ## What Juskoe Is
 
 - A desktop application (not a web app, not a browser extension) for Windows and macOS.
 - Works system-wide: any text field in any application (email clients, IDEs, chat apps,
   word processors, browsers) can receive dictated text.
-- Converts speech to text locally, then optionally routes text through an AI engine for
+- Converts speech to text, then optionally routes the text through an AI engine for
   formatting, grammar correction, or rewriting depending on which mode is active.
-- Built and maintained by 16xStudios.
+- Built and maintained by its independent founding team.
+
+## Team
+
+- Vishwajeeth Rao B — CEO
+- Aishwanth M S — CTO
+- Govind D S — Co-Founder
+
+## Data & Privacy
+
+By accepting Juskoe's Terms of Service and Privacy Policy, users agree that their voice data
+may be used to improve and train Juskoe's models in the future.
 
 ## Modes
 
