@@ -106,7 +106,7 @@ describe("/account?upgraded=1", () => {
     expect(screen.getByText("Activating your Pro…")).toBeInTheDocument();
     expect(screen.queryByText("Pro is active")).not.toBeInTheDocument();
     // Crucially, no upgrade button while activating — that is the re-charge trap.
-    expect(screen.queryByText(/Upgrade to Pro/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Upgrade now/)).not.toBeInTheDocument();
 
     // Walk the whole ~10s backoff out.
     await act(async () => {
@@ -116,7 +116,7 @@ describe("/account?upgraded=1", () => {
     expect(mocks.resolve).toHaveBeenCalledTimes(6);
     expect(screen.queryByText("Pro is active")).not.toBeInTheDocument();
     // Poll finished without Pro: back to the honest free state.
-    expect(screen.getByText(/Upgrade to Pro/)).toBeInTheDocument();
+    expect(screen.getByText(/Upgrade now/)).toBeInTheDocument();
   });
 
   it("flips to Pro mid-poll, as soon as an attempt returns Pro", async () => {

@@ -8,9 +8,6 @@ import Wordmark from "@/components/Wordmark";
 import { useAuth } from "@/hooks/useAuth";
 import { startProCheckout, cancelProSubscription } from "@/lib/checkout";
 
-/** The one canonical offer line. Keep in sync with src/components/Pricing.tsx. */
-const OFFER_LINE = "Pay 1 month and Get 1 month FREE";
-
 /**
  * Post-payment sync schedule, in milliseconds between attempts.
  *
@@ -401,7 +398,7 @@ const Account = () => {
                   ) : (
                     <Sparkles style={{ width: 14, height: 14 }} aria-hidden="true" />
                   )}
-                  {upgrading ? "Starting checkout…" : `Upgrade to Pro — ${OFFER_LINE}`}
+                  {upgrading ? "Starting checkout…" : "Upgrade now"}
                 </button>
               )}
             </div>
@@ -424,8 +421,7 @@ const Account = () => {
 
             {!isPro && !activating && (
               <p style={{ fontSize: 11, color: "rgba(46,45,45,0.4)", marginTop: 12, lineHeight: 1.6 }}>
-                New Pro users get the launch offer: {OFFER_LINE}. ₹49 today covers 2 months,
-                then ₹359/month. Cancel anytime from here or the Juskoe app.
+                ₹359/month. Cancel anytime from here or the Juskoe app.
               </p>
             )}
 
